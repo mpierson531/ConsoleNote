@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ConsoleStuff;
 
-public static class ArgumentExtension
+public static class BigArgs
 {
     public static List<string> BigCopy(string[] args) 
     {

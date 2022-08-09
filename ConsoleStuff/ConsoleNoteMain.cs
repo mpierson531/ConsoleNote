@@ -25,7 +25,7 @@ public class ConsoleClass1
         {
             content = new List<string>(args.Count());
             argsBig = true;
-            content = ArgumentExtension.BigCopy(args);
+            content = BigArgs.BigCopy(args);
                 //.GetRange(3, args.Length - 2);
         }
         else
