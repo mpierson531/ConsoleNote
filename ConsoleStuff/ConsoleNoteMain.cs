@@ -7,7 +7,7 @@ public class ConsoleClass1
     static string? command;
     static string currentDirectory = Environment.CurrentDirectory;
     static bool argsBig = false;
-    static List<string> content;
+    static string[] content;
     public static void Main(string[] args)
     {
         ArgAssignment(args);
@@ -24,7 +24,7 @@ public class ConsoleClass1
         File.Create(currentDirectory + @$"\{fileName}" + ".txt");
     }
 
-    static void WriteToFile(string @fileName, string @fileContent, List<string> @content)
+    static void WriteToFile(string @fileName, string @fileContent, string[] @content)
     {
         if (argsBig && @fileName.Contains(".txt", StringComparison.CurrentCultureIgnoreCase))
         {
@@ -68,7 +68,7 @@ public class ConsoleClass1
     {
         if (args.Length > 3)
         {
-            content = new List<string>(args.Count());
+            content = Array.Empty<string>();
             content = BigArgs.BigCopy(args);
             //.GetRange(3, args.Length - 2);
             argsBig = true;
