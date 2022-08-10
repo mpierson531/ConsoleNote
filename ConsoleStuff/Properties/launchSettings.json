@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "ConsoleNote": {
+      "commandName": "Project",
+      "commandLineArgs": "Write PostRefactorTest6 do you work",
+      "workingDirectory": "C:\\Users\\Micah\\source\\repos\\ConsoleStuff\\ConsoleStuff\\bin\\Debug\\net6.0"
+    }
+  }
+}

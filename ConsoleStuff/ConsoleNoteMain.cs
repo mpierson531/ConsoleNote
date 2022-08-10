@@ -2,17 +2,20 @@
 
 public class ConsoleClass1
 {
-    static string? fileName;
-    static string? fileContent;
-    static string? command;
-    static string currentDirectory = Environment.CurrentDirectory;
-    static bool argsBig = false;
-    static string[] content;
+    static string? FileName;
+    static string? FileContent;
+    static string? Command;
+    static string CurrentDirectory = Environment.CurrentDirectory;
+    static bool IsArgsBig = false;
+    static bool FileNameHasTXT;
+    static List<string> content;
     public static void Main(string[] args)
     {
-        ArgAssignment(args);
-
         IsBig(args);
+
+        HasNewline(content);
+
+        ArgVarAssigning(args);
 
         ArgumentChecking();
 
@@ -21,97 +24,134 @@ public class ConsoleClass1
 
     static void CreateFile(string @fileName)
     {
-        File.Create(currentDirectory + @$"\{fileName}" + ".txt");
+        File.Create(CurrentDirectory + @$"\{fileName}" + ".txt");
     }
 
-    static void WriteToFile(string @fileName, string @fileContent, string[] @content)
+    static void WriteToFile(string @fileName, string @fileContent, List<string> @content)
     {
-        if (argsBig && @fileName.Contains(".txt", StringComparison.CurrentCultureIgnoreCase))
+        if (IsArgsBig && FileNameHasTXT)
         {
             foreach (string i in @content)
             {
                 File.AppendAllText(fileName, i);
             }
-        } else if (argsBig && !fileName.Contains(".txt", StringComparison.CurrentCultureIgnoreCase))
+        } else if (IsArgsBig && !FileNameHasTXT)
         {
             foreach (string j in content)
             {
                 File.AppendAllText(fileName + ".txt", j);
             }
         }
-        else if (!argsBig && fileName.Contains(".txt", StringComparison.CurrentCultureIgnoreCase))
+        else if (!IsArgsBig && FileNameHasTXT)
         {
-            File.AppendAllText(fileName, fileContent);
+            File.AppendAllText(fileName, fileContent + "\n");
         }
-        else if (!argsBig && !fileName.Contains(".txt", StringComparison.CurrentCultureIgnoreCase))
+        else if (!IsArgsBig && !FileNameHasTXT)
         {
             File.AppendAllText(@fileName + ".txt", @fileContent);
         }
     }
 
-    static void ArgAssignment(string[] args)
-    {
-        try
-        {
-            command = args[0];
-            fileName = args[1];
-        }
-        catch (Exception e2)
-        {
-            Console.WriteLine(e2.Message);
-            Console.WriteLine(e2.Source);
-            Console.WriteLine(e2.InnerException);
-        }
-    }
+
 
     static void IsBig(string[] args)
     {
         if (args.Length > 3)
         {
-            content = Array.Empty<string>();
+            content = new List<string>();
             content = BigArgs.BigCopy(args);
             //.GetRange(3, args.Length - 2);
-            argsBig = true;
+            IsArgsBig = true;
         }
         else
         {
+            IsArgsBig = false;
             try
             {
-                fileContent = args[2];
+                //content = args.ToList();
+                FileContent = content[2];
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
             }
-            argsBig = false;
         }
+
+        //HasNewline(ArgVarAssigning(content));
+        //return content;
     }
 
+    static void ArgVarAssigning(string[] args)
+    {
+        try
+        {
+            Command = args[0];
+            FileName = args[1];
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.Message);
+            Console.WriteLine(e.Source);
+            Console.WriteLine(e.InnerException);
+        }
+        //return args;
+    }
+
+
+    static void HasNewline(List<string> args)
+    {
+        if (IsArgsBig)
+        {
+            int argsIndexCounter = 0;
+            foreach (string i in args)
+            {
+                if (i.Contains("\n"))
+                {
+                    args[argsIndexCounter] += "\n";
+                }
+
+                argsIndexCounter++;
+            }
+        }
+        //return;
+    }
     static void ArgumentChecking()
     {
-        if (command == null)
+        DoesFileNameHaveTXT();
+        if (Command is null)
         {
-            Console.WriteLine("Please enter command: create or write");
-            command = Console.ReadLine();
+            Console.WriteLine("Please enter Command: create or write");
+            Command = Console.ReadLine();
         }
 
-        if (fileName == null)
+        if (FileName is null)
         {
             Console.WriteLine("Enter the file name you want to create or change");
-            fileName = Console.ReadLine();
+            FileName = Console.ReadLine();
         }
 
-        if (command.Contains("Create", StringComparison.CurrentCultureIgnoreCase))
+        if (Command.Contains("Create", StringComparison.CurrentCultureIgnoreCase))
         {
-            CreateFile(fileName);
+            CreateFile(FileName);
         }
-        else if (command.Contains("Write", StringComparison.CurrentCultureIgnoreCase))
+        else if (Command.Contains("Write", StringComparison.CurrentCultureIgnoreCase))
         {
-            WriteToFile(fileName, fileContent, content);
+            WriteToFile(FileName, FileContent, content);
         }
         else
         {
             Console.WriteLine("Please enter either 'Create' or 'Write'.");
+        }
+    }
+    static void DoesFileNameHaveTXT()
+    {
+        if (@FileName.Contains(".txt", StringComparison.CurrentCultureIgnoreCase))
+        {
+            FileNameHasTXT = true;
+        }
+        else
+        {
+            FileNameHasTXT = false;
         }
     }
 }

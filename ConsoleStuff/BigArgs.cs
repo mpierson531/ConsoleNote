@@ -8,7 +8,7 @@ namespace ConsoleStuff;
 
 public static class BigArgs
 {
-    public static string[] BigCopy(string[] args) 
+    public static List<string> BigCopy(string[] args) 
     {
         string j;
         int fileContentsCounter = 0;
@@ -33,6 +33,6 @@ public static class BigArgs
             //Array.ConstrainedCopy(args, 3, fileContents, 0, args.Length - 2);
         }
 
-        return fileContents;
+        return fileContents.ToList();
     }
 }
