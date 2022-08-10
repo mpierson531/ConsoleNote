@@ -10,62 +10,11 @@ public class ConsoleClass1
     static List<string> content;
     public static void Main(string[] args)
     {
-        try
-        {
-            command = args[0];
-            fileName = args[1];
-        } catch (Exception e2)
-        {
-            Console.WriteLine(e2.Message);
-            Console.WriteLine(e2.Source);
-            Console.WriteLine(e2.InnerException);
-        }
+        ArgAssignment(args);
 
-        if (args.Length > 3)
-        {
-            content = new List<string>(args.Count());
-            argsBig = true;
-            content = BigArgs.BigCopy(args);
-                //.GetRange(3, args.Length - 2);
-        }
-        else
-        {
-            argsBig = false;
-            try
-            {
-                fileContent = args[2];
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
-        }
+        IsBig(args);
 
-
-        if (command == null)
-        {
-            Console.WriteLine("Please enter command: create or write");
-            command = Console.ReadLine();
-        }
-
-        if (fileName == null)
-        {
-            Console.WriteLine("Enter the file name you want to create or change");
-            fileName = Console.ReadLine();
-        }
-
-        if (command.Contains("Create", StringComparison.CurrentCultureIgnoreCase))
-        {
-            CreateFile(fileName);
-        }
-        else if (command.Contains("Write", StringComparison.CurrentCultureIgnoreCase))
-        {
-            WriteToFile(fileName, fileContent, content);
-        }
-        else
-        {
-            Console.WriteLine("Please enter either 'Create' or 'Write'.");
-        }
+        ArgumentChecking();
 
         Console.ReadLine();
     }
@@ -97,6 +46,72 @@ public class ConsoleClass1
         else if (!argsBig && !fileName.Contains(".txt", StringComparison.CurrentCultureIgnoreCase))
         {
             File.AppendAllText(@fileName + ".txt", @fileContent);
+        }
+    }
+
+    static void ArgAssignment(string[] args)
+    {
+        try
+        {
+            command = args[0];
+            fileName = args[1];
+        }
+        catch (Exception e2)
+        {
+            Console.WriteLine(e2.Message);
+            Console.WriteLine(e2.Source);
+            Console.WriteLine(e2.InnerException);
+        }
+    }
+
+    static void IsBig(string[] args)
+    {
+        if (args.Length > 3)
+        {
+            content = new List<string>(args.Count());
+            content = BigArgs.BigCopy(args);
+            //.GetRange(3, args.Length - 2);
+            argsBig = true;
+        }
+        else
+        {
+            try
+            {
+                fileContent = args[2];
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            argsBig = false;
+        }
+    }
+
+    static void ArgumentChecking()
+    {
+        if (command == null)
+        {
+            Console.WriteLine("Please enter command: create or write");
+            command = Console.ReadLine();
+        }
+
+        if (fileName == null)
+        {
+            Console.WriteLine("Enter the file name you want to create or change");
+            fileName = Console.ReadLine();
+        }
+
+        if (command.Contains("Create", StringComparison.CurrentCultureIgnoreCase))
+        {
+            CreateFile(fileName);
+        }
+        else if (command.Contains("Write", StringComparison.CurrentCultureIgnoreCase))
+        {
+            WriteToFile(fileName, fileContent, content);
+        }
+        else
+        {
+            Console.WriteLine("Please enter either 'Create' or 'Write'.");
         }
     }
 }
