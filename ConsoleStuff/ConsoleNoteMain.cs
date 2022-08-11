@@ -52,14 +52,12 @@ public class ConsoleClass1
         }
     }
 
-
-
     static void IsBig(string[] args)
     {
         if (args.Length > 3)
         {
-            content = new List<string>();
-            content = BigArgs.BigCopy(args);
+            //content = new List<string>();
+            content = Extensions.BigCopy(args);
             //.GetRange(3, args.Length - 2);
             IsArgsBig = true;
         }
