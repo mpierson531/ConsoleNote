@@ -33,19 +33,19 @@ public static class Extensions
         return fileContents.ToList();
     }
 
-    public static List<string> SpaceInsert(List<string> args)
+    public static void SpaceInsert(List<string> args)
     {
-        for (int i = 2; i < args.Count; i++)
+        for (int i = 0; i < args.Count; i++)
         {
             args[i] += " ";
         }
 
-        return args;
+        //return args;
     }
 
-    public static string SpaceInsert(string fileContent)
+    public static void SpaceInsert(string fileContent)
     {
         fileContent += " ";
-        return fileContent;
+        //return fileContent;
     }
 }

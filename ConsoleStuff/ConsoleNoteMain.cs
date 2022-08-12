@@ -11,6 +11,7 @@ public class ConsoleClass1
     static List<string> content;
     public static void Main(string[] args)
     {
+        
         IsBig(args);
 
         HasNewline(content);
@@ -57,22 +58,25 @@ public class ConsoleClass1
         if (args.Length > 3)
         {
             //content = new List<string>();
+            //content = Extensions.SpaceInsert(Extensions.BigCopy(args));
             content = Extensions.BigCopy(args);
+            Extensions.SpaceInsert(content);
             //.GetRange(3, args.Length - 2);
             IsArgsBig = true;
         }
         else
         {
-            IsArgsBig = false;
             try
             {
                 //content = args.ToList();
-                FileContent = content[2];
+                FileContent = args[2];
+                Extensions.SpaceInsert(FileContent);
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
             }
+            IsArgsBig = false;
         }
 
         //HasNewline(ArgVarAssigning(content));
@@ -113,6 +117,7 @@ public class ConsoleClass1
         }
         //return;
     }
+
     static void ArgumentChecking()
     {
         DoesFileNameHaveTXT();
