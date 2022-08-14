@@ -6,10 +6,7 @@ using System.Threading.Tasks;
 
 namespace ConsoleNote
 {
-    internal class ArgumentState : StatesClass
+    internal class Class1
     {
-        public ArgumentState(string[] args) : base(args)
-        {
-        }
     }
 }
