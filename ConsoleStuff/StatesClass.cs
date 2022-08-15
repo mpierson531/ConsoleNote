@@ -9,14 +9,13 @@ namespace ConsoleNote
 {
     public class StatesClass
     {
-        public string? FileName;
         //string? FileContent;
         public string? Command;
         public string CurrentDirectory;
         public bool IsArgsBig = false;
         public bool FileNameHasTXT;
         public List<string> content;
-        public GlobalState globalState;
+        private GlobalState globalState;
         //public GlobalModifier globalModifier;
         public GlobalState CurrentState { get { return globalState; } }
 
@@ -59,16 +58,13 @@ namespace ConsoleNote
             if (IsArgsNull(args))
             {
                 ModifierStatements(args, GlobalModifier.ArgsNull);
-                GlobalStateTransition(args, GlobalModifier.ArgsNull);
             }
             else
             {
                 ModifierStatements(args, GlobalModifier.ArgsNotNull);
-                GlobalStateTransition(args, GlobalModifier.ArgsNotNull);
             }
 
         }
-
 
         public void ModifierStatements(string[] args, GlobalModifier globalModifier)
         {
@@ -134,12 +130,12 @@ namespace ConsoleNote
 
         /*public enum InAppStateModifiers
         {
-            CommandNull, FileNameNull, NeitherNull
+            CommandNull, IsFileOrCmdNull, NeitherNull
         }
 
         public enum ArgumentStateModifiers
         {
-            CommandNull, FileNameNull, NeitherNull
+            CommandNull, IsFileOrCmdNull, NeitherNull
         }*/
 
         /*public enum Action
