@@ -4,12 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ConsoleNote
+namespace ConsoleStuff;
+
+internal class ArgumentState : StatesClass
 {
-    internal class ArgumentState : StatesClass
+    public ArgumentState(string[] args) : base(args)
     {
-        public ArgumentState(string[] args) : base(args)
-        {
-        }
     }
 }

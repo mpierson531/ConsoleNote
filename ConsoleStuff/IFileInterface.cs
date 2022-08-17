@@ -4,12 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ConsoleNote
+namespace ConsoleStuff;
+
+public interface IFileInterface
 {
-    public interface IFileInterface
-    {
-        void CreateFile(string fileName);
-        void WriteToFile(string fileName);
-        void DoesFileNameHaveTXT(string fileName);
-    }
+    void CreateFile(string fileName);
+    void WriteToFile(string fileName);
+    void DoesFileNameHaveTXT(string fileName);
 }

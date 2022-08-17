@@ -11,16 +11,17 @@ public class ConsoleClass1
     static List<string> content;
     public static void Main(string[] args)
     {
-        
-        IsBig(args);
+        StatesClass statesClass = new StatesClass(args);
+
+        /*IsBig(args);
 
         HasNewline(content);
 
         ArgVarAssigning(args);
 
-        ArgumentChecking();
+        ArgumentChecking();*/
 
-        Console.ReadLine();
+        //Console.ReadLine();
     }
 
     static void CreateFile(string @fileName)
