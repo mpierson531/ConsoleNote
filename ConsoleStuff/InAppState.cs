@@ -1,5 +1,4 @@
-﻿using ConsoleStuff;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,11 +6,17 @@ using System.Threading.Tasks;
 
 namespace ConsoleStuff;
 
-public class InAppState : StatesClass, IFileInterface
+public class InAppState
 {
+    private string _CurrentDirectory;
+    private string Command;
+    private bool FileNameHasTXT;
     private AppState appState;
-    public InAppState() : base()
+    public InAppState(string currentDirectory)
     {
+        _CurrentDirectory = currentDirectory;
+        //Command = command;
+
         appState = AppState.Introduction;
         Introduction();
     }
@@ -23,9 +28,8 @@ public class InAppState : StatesClass, IFileInterface
 
     public enum AppModifier
     {
-        IsReady, CommandNull, FileNameNull
+        IsReady, CommandNull, FileNameNull, Pre
     }
-
 
     void Introduction()
     {
@@ -33,6 +37,7 @@ public class InAppState : StatesClass, IFileInterface
         //HandlingState(fileName, AppModifier.IsReady);
 
         IntroDialogue(fileName);
+        HandlingState(fileName, AppModifier.IsReady);
 
         bool IsCommandNull()
         {
@@ -80,7 +85,7 @@ public class InAppState : StatesClass, IFileInterface
 
         CommandWriteDialogue(fileName);
 
-        HandlingState(fileName, AppModifier.IsReady); 
+        //HandlingState(fileName, AppModifier.IsReady);      **ADD AGAIN ONCE APP IS WORKING**
     }
 
     private void CommandDialogue() // Also serves as a "CommandNullDialogue"
@@ -118,11 +123,11 @@ public class InAppState : StatesClass, IFileInterface
         appState = (appState, modifier) switch
         {
             (AppState.Introduction, AppModifier.IsReady) => AppState.PreCreateWrite,
+            (AppState.PreCreateWrite, AppModifier.IsReady) => AppState.CreatingWriting,
             (AppState.PreCreateWrite, AppModifier.CommandNull) => AppState.CommandNull,
             (AppState.PreCreateWrite, AppModifier.FileNameNull) => AppState.FileNameNull,
             (AppState.CommandNull, AppModifier.IsReady) => AppState.CreatingWriting,
             (AppState.FileNameNull, AppModifier.IsReady) => AppState.CreatingWriting,
-            (AppState.PreCreateWrite, AppModifier.IsReady) => AppState.CreatingWriting,
             (AppState.CreatingWriting, AppModifier.IsReady) => AppState.ReadyForNext,
             (AppState.ReadyForNext, AppModifier.IsReady) => AppState.Introduction
             /*(AppState.PreCreateWrite, AppModifier.CommandExecuted) => AppState.ReadyForNext,*/
@@ -162,9 +167,14 @@ public class InAppState : StatesClass, IFileInterface
 
         if (appState == AppState.Introduction)
         {
+            HandlingState(fileName, AppModifier.IsReady);
+        }
+
+        /*if (appState == AppState.Introduction)
+        {
             GC.Collect();
             Introduction();
-        }
+        }*/
 
         /*if (appState == AppState.PreCreateWrite && modifier == AppModifier.IsReady)
         {
@@ -198,17 +208,18 @@ public class InAppState : StatesClass, IFileInterface
     {
         if (Command.Equals("Create", StringComparison.CurrentCultureIgnoreCase))
         {
-            DoesFileNameHaveTXT(fileName);
-            if (FileNameHasTXT)
+            CreateFile(fileName);
+            //DoesFileNameHaveTXT(fileName);
+            /*if (FileNameHasTXT)
             {
                 CreateFile(@fileName);
             }
             else
             {
                 CreateFile(@fileName + ".txt");
-            }
+            }*/
         }
-        else
+        else if (Command.Equals("Write", StringComparison.CurrentCultureIgnoreCase))
         {
             WriteToFile(@fileName);
         }
@@ -216,7 +227,7 @@ public class InAppState : StatesClass, IFileInterface
 
     public void CreateFile(string fileName) // Creates files
     {
-        File.Create(CurrentDirectory + @$"\{fileName}");
+        File.Create(_CurrentDirectory + @$"\{fileName}" + ".txt");
     }
 
     public void WriteToFile(string fileName) // Writes to files (with string)

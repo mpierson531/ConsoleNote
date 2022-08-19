@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace ConsoleStuff;
 
-internal class ArgumentState : StatesClass
+internal class ArgumentState
 {
-    public ArgumentState(string[] args) : base(args)
+    public ArgumentState(string[] args)
     {
     }
 }
