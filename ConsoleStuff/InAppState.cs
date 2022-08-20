@@ -233,6 +233,11 @@ public class InAppState
     {
         string filePath = _CurrentDirectory + @$"\{FileName}" + ".txt";
 
+        if (DoesFileNameHaveTXT())
+        {
+            filePath = _CurrentDirectory + @$"\{FileName}";
+        }
+
         File.Create(filePath);
         Thread.Sleep(500);
 
@@ -257,15 +262,15 @@ public class InAppState
         Console.WriteLine($"Content written to {FileName}");
     }
 
-    public void DoesFileNameHaveTXT() // Checks to see if FileName has ".txt"
+    public bool DoesFileNameHaveTXT() // Checks to see if FileName has ".txt"
     {
-        if (FileName.Contains(".txt", StringComparison.CurrentCultureIgnoreCase))
+        if (!FileName.Contains(".txt", StringComparison.CurrentCultureIgnoreCase))
         {
-            FileNameHasTXT = true;
+            return false;
         }
         else
         {
-            FileNameHasTXT = false;
+            return true;
         }
     }
 }
