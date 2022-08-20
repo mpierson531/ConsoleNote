@@ -91,7 +91,7 @@ public class StatesClass
             ArgumentState argState = new ArgumentState(args);
         }
 
-        //GlobalStateTransition(args);
+        GlobalStateTransition(args);
 
         /*if (globalState.Equals(GlobalState.DetectingState) && globalModifier == GlobalModifier.IsArgsNullOrEmpty)
         {
