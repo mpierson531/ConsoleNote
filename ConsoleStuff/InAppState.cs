@@ -34,7 +34,7 @@ public class InAppState
 
     void Introduction()
     {
-        Console.ForegroundColor = ConsoleColor.Green;
+        Console.ForegroundColor = ConsoleColor.DarkGreen;
 
         //HandlingState(FileName, AppModifier.IsReady);
 
@@ -103,6 +103,7 @@ public class InAppState
         Console.ForegroundColor = ConsoleColor.White;
 
         Command = Console.ReadLine();
+        ExitChecking(FileName);
 
         Console.ForegroundColor = color;
     }
@@ -118,6 +119,7 @@ public class InAppState
             Console.ForegroundColor = ConsoleColor.White;
 
             FileName = Console.ReadLine();
+            ExitChecking(FileName);
 
             Console.ForegroundColor = color;
         }
@@ -134,6 +136,7 @@ public class InAppState
             Console.ForegroundColor = ConsoleColor.White;
 
             FileName = Console.ReadLine();
+            ExitChecking(FileName);
 
             Console.ForegroundColor = color;
         }
@@ -148,6 +151,7 @@ public class InAppState
         Console.ForegroundColor = ConsoleColor.White;
 
         FileName = Console.ReadLine();
+        ExitChecking(FileName);
 
         Console.ForegroundColor = color;
     }
@@ -273,6 +277,7 @@ public class InAppState
         Console.WriteLine($"Enter the content to write to {FileName}.");
 
         string content = Console.ReadLine();
+        ExitChecking(FileName);
 
         File.AppendAllText(FileName + ".txt", content);
 
@@ -296,9 +301,10 @@ public class InAppState
 
         Console.WriteLine("Enter a new command: 'Continue' or 'Exit'");
 
-        Console.ForegroundColor = ConsoleColor.Gray;
+        Console.ForegroundColor = ConsoleColor.White;
 
         string input = Console.ReadLine();
+        ExitChecking(FileName);
 
         Console.ForegroundColor = color;
 
@@ -313,5 +319,20 @@ public class InAppState
             Environment.Exit(0);
         }
 
+    }
+
+    private void ExitChecking(string input) // Not working in Done() method or in CommandDialogue(method)
+    {
+        switch (input)
+        {
+            case "Exit":
+                Console.ResetColor();
+                Environment.Exit(0);
+                break;
+            case "exit":
+                Console.ResetColor();
+                Environment.Exit(0);
+                break;
+        }
     }
 }
