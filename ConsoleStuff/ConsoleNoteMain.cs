@@ -15,7 +15,7 @@ public class ConsoleClass1
 
         /*IsBig(args);
 
-        HasNewline(content);
+        InsertNewline(content);
 
         ArgVarAssigning(args);
 
@@ -80,7 +80,7 @@ public class ConsoleClass1
             IsArgsBig = false;
         }
 
-        //HasNewline(ArgVarAssigning(content));
+        //InsertNewline(ArgVarAssigning(content));
         //return content;
     }
 
@@ -108,7 +108,7 @@ public class ConsoleClass1
             int argsIndexCounter = 0;
             foreach (string i in args)
             {
-                if (i.Contains("\n"))
+                if (i.Contains("\\n"))
                 {
                     args[argsIndexCounter] += "\n";
                 }

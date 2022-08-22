@@ -34,6 +34,8 @@ public class InAppState
 
     void Introduction()
     {
+        Console.ForegroundColor = ConsoleColor.Green;
+
         //HandlingState(FileName, AppModifier.IsReady);
 
         IntroDialogue();
@@ -94,16 +96,30 @@ public class InAppState
 
     private void CommandDialogue() // Also serves as a "CommandNullDialogue"
     {
+        ConsoleColor color = Console.ForegroundColor;
+
         Console.WriteLine("Please enter a command. You may either 'Create' or 'Write'.");
+
+        Console.ForegroundColor = ConsoleColor.White;
+
         Command = Console.ReadLine();
+
+        Console.ForegroundColor = color;
     }
 
     private void CommandCreateDialogue()
     {
         if (Command.Equals("Create", StringComparison.CurrentCultureIgnoreCase))
         {
+            ConsoleColor color = Console.ForegroundColor;
+
             Console.WriteLine("Please enter the name of the file to create.");
+
+            Console.ForegroundColor = ConsoleColor.White;
+
             FileName = Console.ReadLine();
+
+            Console.ForegroundColor = color;
         }
     }
 
@@ -111,15 +127,29 @@ public class InAppState
     {
         if (Command.Equals("Write", StringComparison.CurrentCultureIgnoreCase))
         {
+            ConsoleColor color = Console.ForegroundColor;
+
             Console.WriteLine("Please enter the name of the file to write to.");
+
+            Console.ForegroundColor = ConsoleColor.White;
+
             FileName = Console.ReadLine();
+
+            Console.ForegroundColor = color;
         }
     }
 
     private void FileNameNullDialogue()
     {
+        ConsoleColor color = Console.ForegroundColor;
+
         Console.WriteLine("Please enter a file name.");
+
+        Console.ForegroundColor = ConsoleColor.White;
+
         FileName = Console.ReadLine();
+
+        Console.ForegroundColor = color;
     }
 
     void HandlingState(AppModifier modifier) // Handles what state the program is in
@@ -201,21 +231,6 @@ public class InAppState
         }*/
     }
 
-    private void Done()
-    {
-        Console.WriteLine("Enter a new command: 'Continue' or 'Exit'");
-        string input = Console.ReadLine();
-
-        if (input.Equals("Continue", StringComparison.CurrentCultureIgnoreCase))
-        {
-            HandlingState(AppModifier.IsReady);
-            StateTransition();
-        }
-        else if (input.Equals("Exit", StringComparison.CurrentCultureIgnoreCase))
-        {
-            Environment.Exit(0);
-        }
-    }
 
     private void CreatingWriting()
     {
@@ -231,6 +246,7 @@ public class InAppState
 
     public void CreateFile() // Creates files
     {
+        FileStream createdFile;
         string filePath = _CurrentDirectory + @$"\{FileName}" + ".txt";
 
         if (DoesFileNameHaveTXT())
@@ -238,7 +254,8 @@ public class InAppState
             filePath = _CurrentDirectory + @$"\{FileName}";
         }
 
-        File.Create(filePath);
+        createdFile = File.Create(filePath);
+        createdFile.Close();
         Thread.Sleep(500);
 
         if (File.Exists(filePath))
@@ -272,5 +289,29 @@ public class InAppState
         {
             return true;
         }
+    }
+    private void Done()
+    {
+        ConsoleColor color = Console.ForegroundColor;
+
+        Console.WriteLine("Enter a new command: 'Continue' or 'Exit'");
+
+        Console.ForegroundColor = ConsoleColor.Gray;
+
+        string input = Console.ReadLine();
+
+        Console.ForegroundColor = color;
+
+        if (input.Equals("Continue", StringComparison.CurrentCultureIgnoreCase))
+        {
+            HandlingState(AppModifier.IsReady);
+            StateTransition();
+        }
+        else if (input.Equals("Exit", StringComparison.CurrentCultureIgnoreCase))
+        {
+            Console.ResetColor();
+            Environment.Exit(0);
+        }
+
     }
 }

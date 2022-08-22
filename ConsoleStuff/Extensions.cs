@@ -34,6 +34,32 @@ public static class Extensions
         return fileContents.ToList();
     }
 
+    public static List<string> BigCopy(List<string> content)
+    {
+        //string j;
+        List<string> fileContents = new List<string>(content.Count - 2);
+        int fileContentsCounter = 0;
+        try
+        {
+            for (int i = 2; i < content.Count; i++)
+            {
+                //j = args[i] += " ";
+                fileContents.Insert(fileContentsCounter, content[i]);
+                fileContentsCounter++;
+            }
+
+            //Array.Copy(args, 2, fileContents, 0, args.Length - 2);
+            //Array.ConstrainedCopy(args, 3, fileContents, 0, args.Length - 2);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.InnerException);
+            //Array.ConstrainedCopy(args, 3, fileContents, 0, args.Length - 2);
+        }
+
+        return fileContents;
+    }
+
     public static void SpaceInsert(List<string> args)
     {
         for (int i = 0; i < args.Count; i++)

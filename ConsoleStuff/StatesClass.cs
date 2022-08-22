@@ -32,12 +32,12 @@ public class StatesClass
 
     public enum GlobalState
     {
-        DetectingState, InAppState, ArgumentState
+        DetectingState, InAppState, ArgumentState, Exiting
     }
 
     public enum GlobalModifier
     {
-        ArgsNull, ArgsNotNull
+        ArgsNull, ArgsNotNull, Exit
     }
 
     public void DetectingState(string[] args)
@@ -79,36 +79,11 @@ public class StatesClass
             (GlobalState.DetectingState, GlobalModifier.ArgsNull) => GlobalState.InAppState,
             (GlobalState.DetectingState, GlobalModifier.ArgsNotNull) => GlobalState.ArgumentState,
             (GlobalState.ArgumentState, GlobalModifier.ArgsNull) => GlobalState.InAppState,
-            (GlobalState.InAppState, GlobalModifier.ArgsNotNull) => GlobalState.ArgumentState
+            (GlobalState.InAppState, GlobalModifier.ArgsNotNull) => GlobalState.ArgumentState,
+            (GlobalState.ArgumentState, GlobalModifier.Exit) => GlobalState.Exiting
         };
 
-        if (globalState == GlobalState.InAppState)
-        {
-            InAppState inApp = new InAppState(CurrentDirectory);
-        }
-        else if (globalState == GlobalState.ArgumentState)
-        {
-            ArgumentState argState = new ArgumentState(args);
-        }
-
         GlobalStateTransition(args);
-
-        /*if (globalState.Equals(GlobalState.DetectingState) && globalModifier == GlobalModifier.IsArgsNullOrEmpty)
-        {
-            globalState = GlobalState.InAppState;
-        }
-        else if (globalState.Equals(GlobalState.DetectingState) && globalModifier == GlobalModifier.ArgsNotNull)
-        {
-            globalState = GlobalState.ArgumentState;
-        }
-        else if (globalState.Equals(GlobalState.ArgumentState) && globalModifier.Equals(GlobalModifier.IsArgsNullOrEmpty))
-        {
-            globalState = GlobalState.InAppState;
-        }
-        else if (globalState.Equals(GlobalState.InAppState) && globalModifier.Equals(GlobalModifier.ArgsNotNull))
-        {
-            globalState = GlobalState.ArgumentState;
-        }*/
     }
 
     public void GlobalStateTransition(string[] args)
@@ -116,11 +91,20 @@ public class StatesClass
         if (globalState == GlobalState.InAppState)
         {
             InAppState inApp = new InAppState(CurrentDirectory);
+            StateHandling(args, GlobalModifier.Exit);
         }
         else if (globalState == GlobalState.ArgumentState)
         {
-            ArgumentState argState = new ArgumentState(args);
+            content = args.ToList();
+            ArgumentState argState = new ArgumentState(content);
+            StateHandling(args, GlobalModifier.Exit);
         }
+        else if (globalState == GlobalState.Exiting)
+        {
+            Console.Clear();
+            Environment.Exit(0);
+        }
+
         /*else if ((globalState == GlobalState.ArgumentState) && (args == null || args == Array.Empty<string>()))
         {
             //InAppState inApp = new InAppState();
@@ -131,30 +115,5 @@ public class StatesClass
             //ArgumentState argState = new ArgumentState(args);
             StateHandling(args, GlobalModifier.ArgsNotNull);
         }*/
-
-
-        /*if (globalState == GlobalState.InAppState)
-        {
-            InAppState inApp = new InAppState();
-        }
-        else if (globalState is GlobalState.ArgumentState)
-        {
-            ArgumentState argState = new ArgumentState(args);
-        }*/
     }
 }
-
-    /*public enum InAppStateModifiers
-    {
-        CommandNull, IsFileOrCmdNull, NeitherNull
-    }
-
-    public enum ArgumentStateModifiers
-    {
-        CommandNull, IsFileOrCmdNull, NeitherNull
-    }*/
-
-    /*public enum Action
-    {
-        IsArgsNullOrEmpty,
-    }*/
