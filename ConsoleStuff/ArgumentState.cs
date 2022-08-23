@@ -14,7 +14,7 @@ internal class ArgumentState
     //private string SingleStringContent;
     //private bool IsArgsBig;
     //private bool FileNameHasTXT;
-    private List<string> Content;
+    //private List<string> Content;
     private string SingleStringContent;
     private string CurrentDirectory = Directory.GetCurrentDirectory();
     readonly StringComparison stringComparison = StringComparison.CurrentCultureIgnoreCase;
@@ -117,13 +117,13 @@ internal class ArgumentState
         }
         else if (!IsArgsBig && FileNameHasTXT)
         {
-            InsertNewline(SingleStringContent);
+            SingleStringContent = InsertNewline(SingleStringContent);
             Extensions.SpaceInsert(SingleStringContent);
             File.AppendAllText(fileName, SingleStringContent);
         }
         else if (!IsArgsBig && !FileNameHasTXT)
         {
-            InsertNewline(SingleStringContent);
+            SingleStringContent = InsertNewline(SingleStringContent);             
             Extensions.SpaceInsert(SingleStringContent);
             File.AppendAllText(fileName + ".txt", SingleStringContent);
         }
@@ -161,7 +161,7 @@ internal class ArgumentState
         {
             if (args[i].Contains("\\n"))
             {
-                args[i] += "\n"; // Note to self: rename List<string> args to bigCopy
+                args[i] = "\r\n"; // Note to self: rename List<string> args to bigCopy
             }
 
             //argsIndexCounter++;
@@ -169,14 +169,16 @@ internal class ArgumentState
         //return args;
     }
 
-    private void InsertNewline(string SingleStringContent)
+    private string InsertNewline(string SingleStringContent)
     {
         try
         {
             if (SingleStringContent.Contains("\\n"))
             {
-                SingleStringContent += "\n";
+                SingleStringContent = "\r\n";
             }
         } catch (NullReferenceException) { }
+
+        return SingleStringContent;
     }
 }
