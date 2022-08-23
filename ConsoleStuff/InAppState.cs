@@ -103,7 +103,7 @@ public class InAppState
         Console.ForegroundColor = ConsoleColor.White;
 
         Command = Console.ReadLine();
-        ExitChecking(FileName);
+        ExitChecking(Command);
 
         Console.ForegroundColor = color;
     }
@@ -277,7 +277,7 @@ public class InAppState
         Console.WriteLine($"Enter the content to write to {FileName}.");
 
         string content = Console.ReadLine();
-        ExitChecking(FileName);
+        ExitChecking(content);
 
         File.AppendAllText(FileName + ".txt", content);
 
@@ -304,7 +304,7 @@ public class InAppState
         Console.ForegroundColor = ConsoleColor.White;
 
         string input = Console.ReadLine();
-        ExitChecking(FileName);
+        ExitChecking(input);
 
         Console.ForegroundColor = color;
 
@@ -313,11 +313,8 @@ public class InAppState
             HandlingState(AppModifier.IsReady);
             StateTransition();
         }
-        else if (input.Equals("Exit", StringComparison.CurrentCultureIgnoreCase))
-        {
-            Console.ResetColor();
-            Environment.Exit(0);
-        }
+
+        ExitChecking(input);
 
     }
 

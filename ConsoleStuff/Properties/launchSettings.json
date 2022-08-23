@@ -2,7 +2,6 @@
   "profiles": {
     "ConsoleNote": {
       "commandName": "Project",
-      "commandLineArgs": "write 123 3 4 5",
       "workingDirectory": "C:\\Users\\Micah\\source\\repos\\ConsoleStuff\\ConsoleStuff\\bin\\Debug\\net6.0"
     }
   }
