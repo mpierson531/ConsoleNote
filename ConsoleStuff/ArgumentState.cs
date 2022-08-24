@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -161,7 +162,7 @@ internal class ArgumentState
         {
             if (args[i].Contains("\\n"))
             {
-                args[i] = "\r\n"; // Note to self: rename List<string> args to bigCopy
+                args[i] = args[i].Replace("\\n", Environment.NewLine); // Note to self: rename List<string> args to bigCopy
             }
 
             //argsIndexCounter++;
@@ -175,7 +176,7 @@ internal class ArgumentState
         {
             if (SingleStringContent.Contains("\\n"))
             {
-                SingleStringContent = "\r\n";
+                SingleStringContent = SingleStringContent.Replace("\\n", Environment.NewLine);
             }
         } catch (NullReferenceException) { }
 

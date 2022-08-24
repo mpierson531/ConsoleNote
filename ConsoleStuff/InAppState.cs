@@ -277,6 +277,7 @@ public class InAppState
         Console.WriteLine($"Enter the content to write to {FileName}.");
 
         string content = Console.ReadLine();
+        content = InsertNewline(content);
         ExitChecking(content);
 
         File.AppendAllText(FileName + ".txt", content);
@@ -295,6 +296,21 @@ public class InAppState
             return true;
         }
     }
+
+    private string InsertNewline(string content)
+    {
+        try
+        {
+            if (content.Contains("\\n"))
+            {
+                content = content.Replace("\\n", Environment.NewLine);
+            }
+        }
+        catch (NullReferenceException) { }
+
+        return content;
+    }
+
     private void Done()
     {
         ConsoleColor color = Console.ForegroundColor;
