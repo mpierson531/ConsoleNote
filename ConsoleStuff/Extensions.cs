@@ -57,7 +57,6 @@ public static class Extensions
         {
             args[i] += " ";
         }
-
     }
 
     public static void SpaceInsert(string fileContent)

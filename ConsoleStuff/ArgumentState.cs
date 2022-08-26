@@ -11,7 +11,7 @@ internal class ArgumentState
 {
     private string SingleStringContent;
     private string CurrentDirectory = Directory.GetCurrentDirectory();
-    readonly StringComparison stringComparison = StringComparison.CurrentCultureIgnoreCase;
+    private readonly StringComparison stringComparison = StringComparison.CurrentCultureIgnoreCase;
     private bool IsArgsBig;
     private bool FileNameHasTXT;
     public ArgumentState(List<string> content)

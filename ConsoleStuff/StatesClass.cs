@@ -10,11 +10,11 @@ namespace ConsoleStuff;
 public class StatesClass
 {
     //string? FileContent;
-    public string? Command;
-    public string CurrentDirectory;
-    public bool IsArgsBig;
-    public bool FileNameHasTXT;
-    public List<string> content;
+    private string? Command;
+    private string CurrentDirectory;
+    private bool IsArgsBig;
+    private bool FileNameHasTXT;
+    private List<string> content;
     private GlobalState globalState;
 
     public StatesClass(string[] args)
