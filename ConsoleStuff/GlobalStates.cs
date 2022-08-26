@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace ConsoleStuff;
 
-public class StatesClass
+public class GlobalStates
 {
     private List<string> content;
     private GlobalState globalState;
 
-    public StatesClass(string[] args)
+    public GlobalStates(string[] args)
     {
         globalState = GlobalState.DetectingState;
         string currentDirectory = Environment.CurrentDirectory;
