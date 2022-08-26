@@ -86,9 +86,11 @@ public class InAppState
     {
         CommandDialogue();
 
-        CommandCreateDialogue();
+        CreateDialogue();
 
-        CommandWriteDialogue();
+        WriteDialogue();
+
+        OpenDialogue();
 
         //HandlingState(FileName, AppModifier.IsReady);      **ADD AGAIN ONCE APP IS WORKING** Might still add, have to test more
     }
@@ -97,7 +99,7 @@ public class InAppState
     {
         ConsoleColor color = Console.ForegroundColor;
 
-        Console.WriteLine("Please enter a command. You may either 'Create' or 'Write'.");
+        Console.WriteLine("Please enter a command: You can 'Open', 'Write', or 'Create'.");
 
         Console.ForegroundColor = ConsoleColor.White;
 
@@ -107,7 +109,7 @@ public class InAppState
         Console.ForegroundColor = color;
     }
 
-    private void CommandCreateDialogue()
+    private void CreateDialogue()
     {
         if (Command.Equals("Create", StringComparison.CurrentCultureIgnoreCase))
         {
@@ -124,7 +126,7 @@ public class InAppState
         }
     }
 
-    private void CommandWriteDialogue()
+    private void WriteDialogue()
     {
         if (Command.Equals("Write", StringComparison.CurrentCultureIgnoreCase))
         {
@@ -138,6 +140,26 @@ public class InAppState
             ExitChecking(FileName);
 
             Console.ForegroundColor = color;
+        }
+    }
+
+    private void OpenDialogue()
+    {
+        switch (Command)
+        {
+            case "Open":
+            case "open":
+                ConsoleColor color = Console.ForegroundColor;
+
+                Console.WriteLine("Enter the name or path of the file to read.");
+
+                Console.ForegroundColor = ConsoleColor.White;
+
+                FileName = Console.ReadLine();
+                ExitChecking(FileName);
+
+                Console.ForegroundColor = color;
+                break;
         }
     }
 
@@ -227,6 +249,10 @@ public class InAppState
         {
             WriteToFile();
         }
+        else if (Command.Equals("Open", StringComparison.CurrentCultureIgnoreCase))
+        {
+            OpenFile();
+        }
     }
 
     public void CreateFile() // Creates files
@@ -277,7 +303,15 @@ public class InAppState
         Console.WriteLine($"Content written to {FileName}");
         stopwatch.Stop();
         Console.WriteLine(stopwatch.ElapsedMilliseconds);
+    }
 
+    private void OpenFile()
+    {
+        FileStream openStream = File.Open(FileName + ".txt", FileMode.Open, FileAccess.Read);
+
+        StreamReader openReader = new StreamReader(openStream);
+        Console.WriteLine(openReader.ReadToEnd());
+        openReader.Close();
     }
 
     public bool DoesFileNameHaveTXT() // Checks to see if FileName has ".txt"
@@ -310,7 +344,7 @@ public class InAppState
     {
         ConsoleColor color = Console.ForegroundColor;
 
-        Console.WriteLine("Enter a new command: 'Continue' or 'Exit'");
+        Console.WriteLine("Enter a new command: 'Open', 'Write', 'Create', or 'Exit'.");
 
         Console.ForegroundColor = ConsoleColor.White;
 
