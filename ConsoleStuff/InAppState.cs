@@ -307,11 +307,22 @@ public class InAppState
 
     private void OpenFile()
     {
+        ConsoleColor color = Console.ForegroundColor;
+
+        Console.ForegroundColor = ConsoleColor.Yellow;
+
         FileStream openStream = File.Open(FileName + ".txt", FileMode.Open, FileAccess.Read);
 
         StreamReader openReader = new StreamReader(openStream);
+
+        Console.WriteLine($"From '{FileName}':");
+        Console.WriteLine("");
         Console.WriteLine(openReader.ReadToEnd());
+        Console.WriteLine("");
+
         openReader.Close();
+
+        Console.ForegroundColor = color;
     }
 
     public bool DoesFileNameHaveTXT() // Checks to see if FileName has ".txt"
