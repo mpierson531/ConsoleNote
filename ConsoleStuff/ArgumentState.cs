@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace ConsoleStuff;
 
@@ -34,17 +35,17 @@ internal class ArgumentState
 
         IsBig(Content);
         DoesFileNameHaveTXT(fileName);
-        CreatingWriting(command, fileName, Content); 
+        CreatingWriting(command, fileName, Content);
     }
 
-    private void CreatingWriting(string Command, string fileName, List<string> content)
+    private void CreatingWriting(string command, string fileName, List<string> content)
     {
         List<string> bigCopyOfContent;
-        if (Command.Equals("Create", stringComparison))
+        if (command.Equals("Create", stringComparison))
         {
             CreateFile(fileName);
         }
-        else if (Command.Equals("Write", stringComparison))
+        else if (command.Equals("Write", stringComparison))
         {
             if (IsArgsBig)
             {
@@ -55,6 +56,10 @@ internal class ArgumentState
             {
                 WriteToFile(fileName, content);
             }
+        }
+        else if (command.Equals("Open", stringComparison))
+        {
+            OpenFile(fileName);
         }
     }
 
@@ -116,6 +121,26 @@ internal class ArgumentState
             Extensions.SpaceInsert(SingleStringContent);
             File.AppendAllText(fileName + ".txt", SingleStringContent);
         }
+    }
+
+    private void OpenFile(string fileName)
+    {
+        ConsoleColor color = Console.ForegroundColor;
+
+        Console.ForegroundColor = ConsoleColor.Yellow;
+
+        FileStream openStream = File.Open(fileName + ".txt", FileMode.Open, FileAccess.Read);
+
+        StreamReader openReader = new StreamReader(openStream);
+
+        Console.WriteLine($"From '{fileName}':");
+        Console.WriteLine("");
+        Console.WriteLine(openReader.ReadToEnd());
+        Console.WriteLine("");
+
+        openReader.Close();
+
+        Console.ForegroundColor = color;
     }
 
     private void IsBig(List<string> content)
