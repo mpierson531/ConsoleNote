@@ -9,21 +9,16 @@ namespace ConsoleStuff;
 
 public class StatesClass
 {
-    //string? FileContent;
-    private string? Command;
-    private string CurrentDirectory;
-    private bool IsArgsBig;
-    private bool FileNameHasTXT;
     private List<string> content;
     private GlobalState globalState;
 
     public StatesClass(string[] args)
     {
         globalState = GlobalState.DetectingState;
-        CurrentDirectory = Environment.CurrentDirectory;
+        string currentDirectory = Environment.CurrentDirectory;
 
-        DetectingState(args);
-        GlobalStateTransition(args);
+        DetectingState(args, currentDirectory);
+        //GlobalStateTransition(args, currentDirectory);
     }
 
     public enum GlobalState
@@ -36,7 +31,7 @@ public class StatesClass
         ArgsNull, ArgsNotNull, Exit
     }
 
-    public void DetectingState(string[] args)
+    public void DetectingState(string[] args, string currentDirectory)
     {
         static bool IsArgsNull(string[] args)
         {
@@ -53,15 +48,15 @@ public class StatesClass
 
         if (IsArgsNull(args))
         {
-            StateHandling(args, GlobalModifier.ArgsNull);
+            StateHandling(args, GlobalModifier.ArgsNull, currentDirectory);
         }
         else
         {
-            StateHandling(args, GlobalModifier.ArgsNotNull);
+            StateHandling(args, GlobalModifier.ArgsNotNull, currentDirectory);
         }
     }
 
-    public void StateHandling(string[] args, GlobalModifier globalModifier)
+    public void StateHandling(string[] args, GlobalModifier globalModifier, string currentDirectory)
     {
         globalState = (globalState, globalModifier) switch
         {
@@ -72,21 +67,21 @@ public class StatesClass
             (GlobalState.ArgumentState, GlobalModifier.Exit) => GlobalState.Exiting
         };
 
-        GlobalStateTransition(args);
+        GlobalStateTransition(args, currentDirectory);
     }
 
-    public void GlobalStateTransition(string[] args)
+    public void GlobalStateTransition(string[] args, string currentDirectory)
     {
         if (globalState == GlobalState.InAppState)
         {
-            InAppState inApp = new InAppState(CurrentDirectory);
-            StateHandling(args, GlobalModifier.Exit);
+            InAppState inApp = new InAppState(currentDirectory);
+            StateHandling(args, GlobalModifier.Exit, currentDirectory);
         }
         else if (globalState == GlobalState.ArgumentState)
         {
             content = args.ToList();
             ArgumentState argState = new ArgumentState(content);
-            StateHandling(args, GlobalModifier.Exit);
+            StateHandling(args, GlobalModifier.Exit, currentDirectory);
         }
         else if (globalState == GlobalState.Exiting)
         {

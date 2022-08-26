@@ -1,6 +1,6 @@
 ﻿namespace ConsoleStuff;
 
-public class ConsoleClass1
+public class ConsoleNote
 {
     public static void Main(string[] args)
     {

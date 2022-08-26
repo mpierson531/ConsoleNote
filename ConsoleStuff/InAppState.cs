@@ -257,9 +257,6 @@ public class InAppState
 
     public void CreateFile() // Creates files
     {
-        Stopwatch stopwatch = new Stopwatch();
-        stopwatch.Start();
-
         FileStream createdFile;
         string filePath = _CurrentDirectory + @$"\{FileName}" + ".txt";
 
@@ -270,14 +267,11 @@ public class InAppState
 
         createdFile = File.Create(filePath);
         createdFile.Close();
-        Console.WriteLine(stopwatch.ElapsedMilliseconds);
-        //Thread.Sleep(500);
+        Thread.Sleep(200);
 
         if (File.Exists(filePath))
         {
             Console.WriteLine($"{FileName} created.");
-            stopwatch.Stop();
-            Console.WriteLine(stopwatch.ElapsedMilliseconds);
         }
         else
         {
@@ -287,22 +281,15 @@ public class InAppState
 
     public void WriteToFile() // Writes to files (with string)
     {
-        Stopwatch stopwatch = new Stopwatch();
-        stopwatch.Start();
-
         Console.WriteLine($"Enter the content to write to {FileName}.");
 
         string content = Console.ReadLine();
         content = InsertNewline(content);
         ExitChecking(content);
-        Console.WriteLine(stopwatch.ElapsedMilliseconds);
 
         File.AppendAllText(FileName + ".txt", content);
-        Console.WriteLine(stopwatch.ElapsedMilliseconds);
 
         Console.WriteLine($"Content written to {FileName}");
-        stopwatch.Stop();
-        Console.WriteLine(stopwatch.ElapsedMilliseconds);
     }
 
     private void OpenFile()
@@ -355,7 +342,7 @@ public class InAppState
     {
         ConsoleColor color = Console.ForegroundColor;
 
-        Console.WriteLine("Enter a new command: 'Open', 'Write', 'Create', or 'Exit'.");
+        Console.WriteLine("Enter: 'Continue' or 'Exit'");
 
         Console.ForegroundColor = ConsoleColor.White;
 

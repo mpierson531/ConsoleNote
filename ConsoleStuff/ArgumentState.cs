@@ -27,6 +27,7 @@ internal class ArgumentState
 
         string command = Content[0];
         string fileName = Content[1];
+
         try
         {
             SingleStringContent = Content[2];
@@ -145,7 +146,7 @@ internal class ArgumentState
 
     private void IsBig(List<string> content)
     {
-        if (content.Count > 3)
+        if (content.Count > 0)
         {
             IsArgsBig = true;
         }
