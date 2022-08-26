@@ -20,7 +20,7 @@ internal class ArgumentState
         ///
         /// NEED TO FIGURE OUT WHY IT'S WRITING THE CONTENT TWICE WHEN IsArgsBig IS TRUE. 
         /// 
-        /// Figured it out: when ArgumentState was done, it kept returning to StatesClass and running again with same variable values
+        /// Figured it out: when ArgumentState was done, it kept returning to StatesClass and running again with the same variable values
         /// 
 
         List<string> Content = content;

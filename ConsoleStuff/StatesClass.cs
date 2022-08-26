@@ -36,7 +36,7 @@ public class StatesClass
         static bool IsArgsNull(string[] args)
         {
 
-            if (args is null || args.Count() <= 1)
+            if (args is null || args.Length < 2)
             {
                 return true;
             }
@@ -85,7 +85,6 @@ public class StatesClass
         }
         else if (globalState == GlobalState.Exiting)
         {
-            Console.Clear();
             Environment.Exit(0);
         }
     }
