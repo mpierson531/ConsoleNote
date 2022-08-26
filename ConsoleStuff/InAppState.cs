@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace ConsoleStuff;
 
@@ -29,14 +30,12 @@ public class InAppState
 
     public enum AppModifier
     {
-        IsReady, CommandNull, FileNameNull, Pre, Done
+        IsReady, CommandNull, FileNameNull, Done
     }
 
     void Introduction()
     {
-        Console.ForegroundColor = ConsoleColor.DarkGreen;
-
-        //HandlingState(FileName, AppModifier.IsReady);
+        Console.ForegroundColor = ConsoleColor.Green;
 
         IntroDialogue();
         HandlingState(AppModifier.IsReady);
@@ -91,7 +90,7 @@ public class InAppState
 
         CommandWriteDialogue();
 
-        //HandlingState(FileName, AppModifier.IsReady);      **ADD AGAIN ONCE APP IS WORKING**
+        //HandlingState(FileName, AppModifier.IsReady);      **ADD AGAIN ONCE APP IS WORKING** Might still add, have to test more
     }
 
     private void CommandDialogue() // Also serves as a "CommandNullDialogue"
@@ -170,15 +169,10 @@ public class InAppState
             (AppState.Done, AppModifier.IsReady) => AppState.Introduction,
             (AppState.CreatingWriting, AppModifier.IsReady) => AppState.ReadyForNext,
             (AppState.ReadyForNext, AppModifier.IsReady) => AppState.Introduction
-            /*(AppState.PreCreateWrite, AppModifier.CommandExecuted) => AppState.ReadyForNext,*/
-            // Note to self: Add second dialogue for if user wants to create/write again
         };
-
-        //StateTransition(/*, modifier*/);
-        //return;
     }
 
-    void StateTransition(/*, AppModifier modifier*/) // Handles transition of one state to another, i.e. Introduction - PreCreateWrite
+    void StateTransition() // Handles transition of one state to another, like Introduction to PreCreateWrite
     {
         if (appState == AppState.CommandNull)
         {
@@ -214,25 +208,12 @@ public class InAppState
         if (appState == AppState.Introduction)
         {
             Introduction();
-            /*HandlingState(AppModifier.IsReady);
-            StateTransition();*/
         }
 
         if (appState == AppState.Done)
         {
             Done();
         }
-
-        /*if (appState == AppState.Done)
-        {
-            return;
-        }*/
-
-        /*if (appState == AppState.Introduction)
-        {
-            GC.Collect();
-            Introduction();
-        }*/
     }
 
 
@@ -250,6 +231,9 @@ public class InAppState
 
     public void CreateFile() // Creates files
     {
+        Stopwatch stopwatch = new Stopwatch();
+        stopwatch.Start();
+
         FileStream createdFile;
         string filePath = _CurrentDirectory + @$"\{FileName}" + ".txt";
 
@@ -260,11 +244,14 @@ public class InAppState
 
         createdFile = File.Create(filePath);
         createdFile.Close();
-        Thread.Sleep(500);
+        Console.WriteLine(stopwatch.ElapsedMilliseconds);
+        //Thread.Sleep(500);
 
         if (File.Exists(filePath))
         {
             Console.WriteLine($"{FileName} created.");
+            stopwatch.Stop();
+            Console.WriteLine(stopwatch.ElapsedMilliseconds);
         }
         else
         {
@@ -274,15 +261,23 @@ public class InAppState
 
     public void WriteToFile() // Writes to files (with string)
     {
+        Stopwatch stopwatch = new Stopwatch();
+        stopwatch.Start();
+
         Console.WriteLine($"Enter the content to write to {FileName}.");
 
         string content = Console.ReadLine();
         content = InsertNewline(content);
         ExitChecking(content);
+        Console.WriteLine(stopwatch.ElapsedMilliseconds);
 
         File.AppendAllText(FileName + ".txt", content);
+        Console.WriteLine(stopwatch.ElapsedMilliseconds);
 
         Console.WriteLine($"Content written to {FileName}");
+        stopwatch.Stop();
+        Console.WriteLine(stopwatch.ElapsedMilliseconds);
+
     }
 
     public bool DoesFileNameHaveTXT() // Checks to see if FileName has ".txt"

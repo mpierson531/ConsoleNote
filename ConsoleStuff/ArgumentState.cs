@@ -9,13 +9,6 @@ namespace ConsoleStuff;
 
 internal class ArgumentState
 {
-    //private string command;
-    //private string fileName;
-    //private List<string> bigCopy;
-    //private string SingleStringContent;
-    //private bool IsArgsBig;
-    //private bool FileNameHasTXT;
-    //private List<string> Content;
     private string SingleStringContent;
     private string CurrentDirectory = Directory.GetCurrentDirectory();
     readonly StringComparison stringComparison = StringComparison.CurrentCultureIgnoreCase;
@@ -24,7 +17,9 @@ internal class ArgumentState
     public ArgumentState(List<string> content)
     {
         ///
-        /// NEED TO FIGURE OUT WHY IT'S WRITING THE CONTENT TWICE WHEN IsArgsBig IS TRUE
+        /// NEED TO FIGURE OUT WHY IT'S WRITING THE CONTENT TWICE WHEN IsArgsBig IS TRUE. 
+        /// 
+        /// Figured it out: when ArgumentState was done, it kept returning to StatesClass and running again with same variable values
         /// 
 
         List<string> Content = content;
@@ -89,13 +84,6 @@ internal class ArgumentState
 
     private void WriteToFile(string fileName, List<string> bigCopy) // Also inserts spaces and newlines
     {
-        /*string filePath = CurrentDirectory + @$"\{fileName}" + ".txt";
-
-        if (FileNameHasTXT)
-        {
-            filePath = CurrentDirectory + @$"\{fileName}";
-        }*/
-
         if (IsArgsBig && FileNameHasTXT)
         {
             InsertNewline(bigCopy);
@@ -134,12 +122,10 @@ internal class ArgumentState
     {
         if (content.Count > 3)
         {
-            //bigCopy = Extensions.SpaceInsert(bigCopy);
             IsArgsBig = true;
         }
         else
         {
-            //bigCopy = Extensions.SpaceInsert(bigCopy);
             IsArgsBig = false;
         }
     }
@@ -156,18 +142,16 @@ internal class ArgumentState
         }
     }
 
-    private void InsertNewline(List<string> args)
+    private void InsertNewline(List<string> bigCopy)
     {
-        for (int i = 0; i < args.Count; i++)
+        for (int i = 0; i < bigCopy.Count; i++)
         {
-            if (args[i].Contains("\\n"))
+            if (bigCopy[i].Contains("\\n"))
             {
-                args[i] = args[i].Replace("\\n", Environment.NewLine); // Note to self: rename List<string> args to bigCopy
+                bigCopy[i] = bigCopy[i].Replace("\\n", Environment.NewLine);
             }
 
-            //argsIndexCounter++;
         }
-        //return args;
     }
 
     private string InsertNewline(string SingleStringContent)
