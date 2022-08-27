@@ -11,7 +11,6 @@ public class InAppState
 {
     private string _CurrentDirectory;
     private string Command;
-    private bool FileNameHasTXT;
     private AppState appState;
     private string FileName = String.Empty;
     public InAppState(string currentDirectory)
