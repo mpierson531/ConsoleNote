@@ -257,11 +257,15 @@ public class InAppState
     private void CreateFile() // Creates files
     {
         FileStream createdFile;
-        string filePath = _CurrentDirectory + @$"\{FileName}" + ".txt";
+        string filePath;
 
         if (DoesFileNameHaveTXT())
         {
-            filePath = _CurrentDirectory + @$"\{FileName}";
+            filePath = FileName;
+        }
+        else
+        {
+            filePath = FileName + ".txt";
         }
 
         createdFile = File.Create(filePath);
@@ -286,9 +290,18 @@ public class InAppState
         content = InsertNewline(content);
         ExitChecking(content);
 
-        File.AppendAllText(FileName + ".txt", content);
+        string filePath;
+        if (DoesFileNameHaveTXT())
+        {
+            filePath = FileName;
+        }
+        else
+        {
+            filePath = FileName + ".txt";
+        }
+        File.AppendAllText(filePath, content);
 
-        Console.WriteLine($"Content written to {FileName}");
+        Console.WriteLine($"Content written to '{FileName}'");
     }
 
     private void OpenFile() // Reads the contents of .txt files to the console
@@ -297,7 +310,16 @@ public class InAppState
 
         Console.ForegroundColor = ConsoleColor.Yellow;
 
-        FileStream openStream = File.Open(FileName + ".txt", FileMode.Open, FileAccess.Read);
+        string filePath;
+        if (DoesFileNameHaveTXT())
+        {
+            filePath = FileName;
+        }
+        else
+        {
+            filePath = FileName + ".txt";
+        }
+        FileStream openStream = File.Open(filePath, FileMode.Open, FileAccess.Read);
 
         StreamReader openReader = new StreamReader(openStream);
 
