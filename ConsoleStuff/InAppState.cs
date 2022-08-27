@@ -38,7 +38,7 @@ public class InAppState
         Console.ForegroundColor = ConsoleColor.Green;
 
         IntroDialogue();
-        HandlingState(AppModifier.IsReady);
+        HandlingState(AppModifier.IsReady); // Changing state to PreCreateWrite
         StateTransition();
 
         bool IsCommandNull()
@@ -91,8 +91,6 @@ public class InAppState
         WriteDialogue();
 
         OpenDialogue();
-
-        //HandlingState(FileName, AppModifier.IsReady);      **ADD AGAIN ONCE APP IS WORKING** Might still add, have to test more
     }
 
     private void CommandDialogue() // Also serves as a "CommandNullDialogue"
@@ -109,7 +107,7 @@ public class InAppState
         Console.ForegroundColor = color;
     }
 
-    private void CreateDialogue()
+    private void CreateDialogue() // When Command == Create
     {
         if (Command.Equals("Create", StringComparison.CurrentCultureIgnoreCase))
         {
@@ -126,7 +124,7 @@ public class InAppState
         }
     }
 
-    private void WriteDialogue()
+    private void WriteDialogue() // When Command == Write
     {
         if (Command.Equals("Write", StringComparison.CurrentCultureIgnoreCase))
         {
@@ -143,7 +141,7 @@ public class InAppState
         }
     }
 
-    private void OpenDialogue()
+    private void OpenDialogue() // When Command == Open
     {
         switch (Command)
         {
@@ -241,17 +239,20 @@ public class InAppState
 
     private void CreatingWriting()
     {
-        if (Command.Equals("Create", StringComparison.CurrentCultureIgnoreCase))
+        switch (Command)
         {
-            CreateFile();
-        }
-        else if (Command.Equals("Write", StringComparison.CurrentCultureIgnoreCase))
-        {
-            WriteToFile();
-        }
-        else if (Command.Equals("Open", StringComparison.CurrentCultureIgnoreCase))
-        {
-            OpenFile();
+            case "Create":
+            case "create":
+                CreateFile();
+                break;
+            case "Write":
+            case "write":
+                WriteToFile();
+                break;
+            case "Open":
+            case "open":
+                OpenFile();
+                break;
         }
     }
 
