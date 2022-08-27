@@ -236,7 +236,6 @@ public class InAppState
         }
     }
 
-
     private void CreatingWriting()
     {
         switch (Command)
@@ -293,7 +292,7 @@ public class InAppState
         Console.WriteLine($"Content written to {FileName}");
     }
 
-    private void OpenFile()
+    private void OpenFile() // Reads the contents of .txt files to the console
     {
         ConsoleColor color = Console.ForegroundColor;
 
@@ -339,7 +338,7 @@ public class InAppState
         return content;
     }
 
-    private void Done()
+    private void Done() // Runs when one command has finished
     {
         ConsoleColor color = Console.ForegroundColor;
 
