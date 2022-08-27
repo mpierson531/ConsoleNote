@@ -156,7 +156,7 @@ internal class ArgumentState
         }
     }
 
-    public void DoesFileNameHaveTXT(string fileName) // Checks to see if fileName has ".txt"
+    private void DoesFileNameHaveTXT(string fileName) // Checks to see if fileName has ".txt"
     {
         if (!fileName.Contains(".txt", StringComparison.CurrentCultureIgnoreCase))
         {

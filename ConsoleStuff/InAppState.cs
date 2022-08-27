@@ -23,17 +23,17 @@ public class InAppState
         Introduction();
     }
 
-    public enum AppState
+    private enum AppState
     {
         Introduction, PreCreateWrite, CommandNull, FileNameNull, ReadyForNext, CreatingWriting, Done
     }
 
-    public enum AppModifier
+    private enum AppModifier
     {
         IsReady, CommandNull, FileNameNull, Done
     }
 
-    void Introduction()
+    private void Introduction()
     {
         Console.ForegroundColor = ConsoleColor.Green;
 
@@ -82,7 +82,7 @@ public class InAppState
         }
     }
 
-    void IntroDialogue() // Intro dialogue for greeting user and capturing FileName and Command
+    private void IntroDialogue() // Intro dialogue for greeting user and capturing FileName and Command
     {
         CommandDialogue();
 
@@ -175,7 +175,7 @@ public class InAppState
         Console.ForegroundColor = color;
     }
 
-    void HandlingState(AppModifier modifier) // Handles what state the program is in
+    private void HandlingState(AppModifier modifier) // Handles what state the program is in
     {
         appState = (appState, modifier) switch
         {
@@ -192,7 +192,7 @@ public class InAppState
         };
     }
 
-    void StateTransition() // Handles transition of one state to another, like Introduction to PreCreateWrite
+    private void StateTransition() // Handles transition of one state to another, like Introduction to PreCreateWrite
     {
         if (appState == AppState.CommandNull)
         {
@@ -255,7 +255,7 @@ public class InAppState
         }
     }
 
-    public void CreateFile() // Creates files
+    private void CreateFile() // Creates files
     {
         FileStream createdFile;
         string filePath = _CurrentDirectory + @$"\{FileName}" + ".txt";
@@ -279,7 +279,7 @@ public class InAppState
         }
     }
 
-    public void WriteToFile() // Writes to files (with string)
+    private void WriteToFile() // Writes to files (with string)
     {
         Console.WriteLine($"Enter the content to write to {FileName}.");
 
@@ -312,7 +312,7 @@ public class InAppState
         Console.ForegroundColor = color;
     }
 
-    public bool DoesFileNameHaveTXT() // Checks to see if FileName has ".txt"
+    private bool DoesFileNameHaveTXT() // Checks to see if FileName has ".txt"
     {
         if (!FileName.Contains(".txt", StringComparison.CurrentCultureIgnoreCase))
         {

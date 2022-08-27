@@ -21,17 +21,17 @@ public class GlobalStates
         //GlobalStateTransition(args, currentDirectory);
     }
 
-    public enum GlobalState
+    private enum GlobalState
     {
         DetectingState, InAppState, ArgumentState, Exiting
     }
 
-    public enum GlobalModifier
+    private enum GlobalModifier
     {
         ArgsNull, ArgsNotNull, Exit
     }
 
-    public void DetectingState(string[] args, string currentDirectory)
+    private void DetectingState(string[] args, string currentDirectory)
     {
         static bool IsArgsNull(string[] args)
         {
@@ -56,7 +56,7 @@ public class GlobalStates
         }
     }
 
-    public void StateHandling(string[] args, GlobalModifier globalModifier, string currentDirectory)
+    private void StateHandling(string[] args, GlobalModifier globalModifier, string currentDirectory)
     {
         globalState = (globalState, globalModifier) switch
         {
@@ -70,7 +70,7 @@ public class GlobalStates
         GlobalStateTransition(args, currentDirectory);
     }
 
-    public void GlobalStateTransition(string[] args, string currentDirectory)
+    private void GlobalStateTransition(string[] args, string currentDirectory)
     {
         if (globalState == GlobalState.InAppState)
         {
