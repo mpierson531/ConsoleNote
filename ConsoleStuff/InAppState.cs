@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics;
+using System.Reflection.Metadata;
 
 namespace ConsoleStuff;
 
@@ -102,7 +103,7 @@ public class InAppState
 
         Console.ForegroundColor = ConsoleColor.White;
 
-        Command = Console.ReadLine();
+        Command = Console.ReadLine().Trim();
         ExitChecking(Command);
 
         Console.ForegroundColor = color;
@@ -334,7 +335,7 @@ public class InAppState
 
             openReader.Close();
         }
-        catch (FileNotFoundException e)
+        catch (FileNotFoundException)
         {
             Console.WriteLine($"File '{FileName}' could not be found.");
         }

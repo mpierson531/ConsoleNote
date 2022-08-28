@@ -42,11 +42,11 @@ internal class ArgumentState
     private void CreatingWriting(string command, string fileName, List<string> content)
     {
         List<string> bigCopyOfContent;
-        if (command.Equals("Create", stringComparison))
+        if (command.Trim().Equals("Create", stringComparison))
         {
             CreateFile(fileName);
         }
-        else if (command.Equals("Write", stringComparison))
+        else if (command.Trim().Equals("Write", stringComparison))
         {
             if (IsArgsBig)
             {
@@ -58,7 +58,7 @@ internal class ArgumentState
                 WriteToFile(fileName, content);
             }
         }
-        else if (command.Equals("Open", stringComparison))
+        else if (command.Trim().Equals("Open", stringComparison))
         {
             OpenFile(fileName);
         }

@@ -2,7 +2,6 @@
   "profiles": {
     "ConsoleNote": {
       "commandName": "Project",
-      "commandLineArgs": "open ds",
       "workingDirectory": "C:\\Users\\Micah\\source\\repos\\ConsoleStuff\\ConsoleStuff\\bin\\Debug\\net6.0"
     }
   }
