@@ -130,16 +130,21 @@ internal class ArgumentState
 
         Console.ForegroundColor = ConsoleColor.Yellow;
 
-        FileStream openStream = File.Open(fileName + ".txt", FileMode.Open, FileAccess.Read);
+        try
+        {
+            FileStream openStream = File.Open(fileName + ".txt", FileMode.Open, FileAccess.Read);
+            StreamReader openReader = new StreamReader(openStream);
 
-        StreamReader openReader = new StreamReader(openStream);
+            Console.WriteLine($"From '{fileName}':");
+            Console.WriteLine("");
+            Console.WriteLine(openReader.ReadToEnd());
+            Console.WriteLine("");
 
-        Console.WriteLine($"From '{fileName}':");
-        Console.WriteLine("");
-        Console.WriteLine(openReader.ReadToEnd());
-        Console.WriteLine("");
-
-        openReader.Close();
+            openReader.Close();
+        } catch (FileNotFoundException)
+        {
+            Console.WriteLine($"File '{fileName}' could not be found.");
+        }
 
         Console.ForegroundColor = color;
     }

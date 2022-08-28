@@ -13,6 +13,8 @@ public class InAppState
     private string Command;
     private AppState appState;
     private string FileName = String.Empty;
+    private StringComparison StrComparison = StringComparison.CurrentCultureIgnoreCase;
+
     public InAppState(string currentDirectory)
     {
         _CurrentDirectory = currentDirectory;
@@ -319,16 +321,24 @@ public class InAppState
         {
             filePath = FileName + ".txt";
         }
-        FileStream openStream = File.Open(filePath, FileMode.Open, FileAccess.Read);
 
-        StreamReader openReader = new StreamReader(openStream);
+        try
+        {
+            FileStream openStream = File.Open(filePath, FileMode.Open, FileAccess.Read);
+            StreamReader openReader = new StreamReader(openStream);
 
-        Console.WriteLine($"From '{FileName}':");
-        Console.WriteLine("");
-        Console.WriteLine(openReader.ReadToEnd());
-        Console.WriteLine("");
+            Console.WriteLine($"From '{FileName}':");
+            Console.WriteLine("");
+            Console.WriteLine(openReader.ReadToEnd());
+            Console.WriteLine("");
 
-        openReader.Close();
+            openReader.Close();
+        }
+        catch (FileNotFoundException e)
+        {
+            Console.WriteLine($"File '{FileName}' could not be found.");
+        }
+
 
         Console.ForegroundColor = color;
     }
