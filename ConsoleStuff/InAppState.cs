@@ -119,7 +119,7 @@ public class InAppState
 
             Console.ForegroundColor = ConsoleColor.White;
 
-            FileName = Console.ReadLine();
+            FileName = Console.ReadLine().Trim();
             ExitChecking(FileName);
 
             Console.ForegroundColor = color;
@@ -136,7 +136,7 @@ public class InAppState
 
             Console.ForegroundColor = ConsoleColor.White;
 
-            FileName = Console.ReadLine();
+            FileName = Console.ReadLine().Trim();
             ExitChecking(FileName);
 
             Console.ForegroundColor = color;
@@ -155,7 +155,7 @@ public class InAppState
 
                 Console.ForegroundColor = ConsoleColor.White;
 
-                FileName = Console.ReadLine();
+                FileName = Console.ReadLine().Trim();
                 ExitChecking(FileName);
 
                 Console.ForegroundColor = color;
@@ -171,7 +171,7 @@ public class InAppState
 
         Console.ForegroundColor = ConsoleColor.White;
 
-        FileName = Console.ReadLine();
+        FileName = Console.ReadLine().Trim();
         ExitChecking(FileName);
 
         Console.ForegroundColor = color;
@@ -378,7 +378,7 @@ public class InAppState
 
         Console.ForegroundColor = ConsoleColor.White;
 
-        string input = Console.ReadLine();
+        string input = Console.ReadLine().Trim();
         ExitChecking(input);
 
         Console.ForegroundColor = color;
