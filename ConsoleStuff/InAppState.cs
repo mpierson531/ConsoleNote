@@ -383,14 +383,18 @@ public class InAppState
 
         Console.ForegroundColor = color;
 
-        if (input.Equals("Continue", StringComparison.CurrentCultureIgnoreCase))
+        switch (input)
         {
-            HandlingState(AppModifier.IsReady);
-            StateTransition();
+            case "Continue":
+            case "continue":
+            case "Exit":
+            case "exit":
+                HandlingState(AppModifier.IsReady);
+                StateTransition();
+                break;
         }
 
         ExitChecking(input);
-
     }
 
     private void ExitChecking(string input) // Not working in Done() method or in CommandDialogue(method)
@@ -398,9 +402,6 @@ public class InAppState
         switch (input)
         {
             case "Exit":
-                Console.ResetColor();
-                Environment.Exit(0);
-                break;
             case "exit":
                 Console.ResetColor();
                 Environment.Exit(0);
