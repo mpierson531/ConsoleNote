@@ -93,6 +93,8 @@ public class InAppState
         WriteDialogue();
 
         OpenDialogue();
+
+        DeleteDialogue();
     }
 
     private void CommandDialogue() // Also serves as a "CommandNullDialogue"
@@ -152,6 +154,26 @@ public class InAppState
                 ConsoleColor color = Console.ForegroundColor;
 
                 Console.WriteLine("Enter the name or path of the file to read.");
+
+                Console.ForegroundColor = ConsoleColor.White;
+
+                FileName = Console.ReadLine().Trim();
+                ExitChecking(FileName);
+
+                Console.ForegroundColor = color;
+                break;
+        }
+    }
+
+    private void DeleteDialogue()
+    {
+        switch (Command)
+        {
+            case "Delete":
+            case "delete":
+                ConsoleColor color = Console.ForegroundColor;
+
+                Console.WriteLine("Enter the name or path of the file to delete.");
 
                 Console.ForegroundColor = ConsoleColor.White;
 
@@ -254,6 +276,10 @@ public class InAppState
             case "open":
                 OpenFile();
                 break;
+            case "Delete":
+            case "delete":
+                DeleteFile();
+                break;
         }
     }
 
@@ -302,8 +328,8 @@ public class InAppState
         {
             filePath = FileName + ".txt";
         }
+        
         File.AppendAllText(filePath, content);
-
         Console.WriteLine($"Content written to '{FileName}'");
     }
 
@@ -342,6 +368,30 @@ public class InAppState
 
 
         Console.ForegroundColor = color;
+    }
+
+    private void DeleteFile() // Not working
+    {
+        string filePath;
+
+        if (DoesFileNameHaveTXT())
+        {
+            filePath = FileName;
+        }
+        else
+        {
+            filePath = FileName + ".txt";
+        }
+
+        if (File.Exists(filePath))
+        {
+            File.Delete(FileName + ".txt");
+            Console.WriteLine(FileName + " deleted.");
+        }
+        else
+        {
+            Console.WriteLine($"'{filePath}' could not be found.");
+        }
     }
 
     private bool DoesFileNameHaveTXT() // Checks to see if FileName has ".txt"
