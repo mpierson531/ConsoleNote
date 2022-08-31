@@ -101,7 +101,7 @@ public class InAppState
     {
         ConsoleColor color = Console.ForegroundColor;
 
-        Console.WriteLine("Please enter a command: You can 'Open', 'Write', or 'Create'.");
+        Console.WriteLine("Please enter a command: You can 'Open', 'Write', 'Create', or 'Delete'.");
 
         Console.ForegroundColor = ConsoleColor.White;
 

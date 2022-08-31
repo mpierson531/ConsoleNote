@@ -62,6 +62,10 @@ internal class ArgumentState
         {
             OpenFile(fileName);
         }
+        else if (command.Trim().Equals("Delete", stringComparison))
+        {
+            DeleteFile(fileName);
+        }
     }
 
     private void CreateFile(string fileName) // Creates files
@@ -147,6 +151,30 @@ internal class ArgumentState
         }
 
         Console.ForegroundColor = color;
+    }
+
+    private void DeleteFile(string fileName) // Not working
+    {
+        string filePath;
+
+        if (FileNameHasTXT)
+        {
+            filePath = fileName;
+        }
+        else
+        {
+            filePath = fileName + ".txt";
+        }
+
+        if (File.Exists(filePath))
+        {
+            File.Delete(fileName + ".txt");
+            Console.WriteLine(fileName + " deleted.");
+        }
+        else
+        {
+            Console.WriteLine($"'{filePath}' could not be found.");
+        }
     }
 
     private void IsBig(List<string> content)

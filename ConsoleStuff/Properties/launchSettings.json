@@ -2,6 +2,7 @@
   "profiles": {
     "ConsoleNote": {
       "commandName": "Project",
+      "commandLineArgs": "delete dd",
       "workingDirectory": "C:\\Users\\Micah\\source\\repos\\ConsoleStuff\\ConsoleStuff\\bin\\Debug\\net6.0"
     }
   }
