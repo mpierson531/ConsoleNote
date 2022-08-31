@@ -25,7 +25,7 @@ internal class ArgumentState
 
         List<string> Content = content;
 
-        string command = Content[0];
+        string command = Content[0].Trim();
         string fileName = Content[1];
 
         try
@@ -42,29 +42,33 @@ internal class ArgumentState
     private void CreatingWriting(string command, string fileName, List<string> content)
     {
         List<string> bigCopyOfContent;
-        if (command.Trim().Equals("Create", stringComparison))
+
+        switch (command)
         {
-            CreateFile(fileName);
-        }
-        else if (command.Trim().Equals("Write", stringComparison))
-        {
-            if (IsArgsBig)
-            {
-                bigCopyOfContent = Extensions.BigCopy(content);
-                WriteToFile(fileName, bigCopyOfContent);
-            }
-            else
-            {
-                WriteToFile(fileName, content);
-            }
-        }
-        else if (command.Trim().Equals("Open", stringComparison))
-        {
-            OpenFile(fileName);
-        }
-        else if (command.Trim().Equals("Delete", stringComparison))
-        {
-            DeleteFile(fileName);
+            case "Create":
+            case "create":
+                CreateFile(fileName);
+                break;
+            case "Write":
+            case "write":
+                if (IsArgsBig)
+                {
+                    bigCopyOfContent = Extensions.BigCopy(content);
+                    WriteToFile(fileName, bigCopyOfContent);
+                }
+                else
+                {
+                    WriteToFile(fileName, content);
+                }
+                break;
+            case "Open":
+            case "open":
+                OpenFile(fileName);
+                break;
+            case "Delete":
+            case "delete":
+                DeleteFile(fileName);
+                break;
         }
     }
 
@@ -147,6 +151,7 @@ internal class ArgumentState
             openReader.Close();
         } catch (FileNotFoundException)
         {
+            Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine($"File '{fileName}' could not be found.");
         }
 
@@ -155,6 +160,8 @@ internal class ArgumentState
 
     private void DeleteFile(string fileName) // Not working
     {
+        ConsoleColor color = Console.ForegroundColor;
+        Console.ForegroundColor = ConsoleColor.Green;
         string filePath;
 
         if (FileNameHasTXT)
@@ -173,8 +180,11 @@ internal class ArgumentState
         }
         else
         {
+            Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine($"'{filePath}' could not be found.");
         }
+
+        Console.ForegroundColor = color;
     }
 
     private void IsBig(List<string> content)
