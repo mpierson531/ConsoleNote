@@ -10,12 +10,9 @@ namespace ConsoleStuff;
 
 public class InAppState
 {
-    private string _CurrentDirectory;
     private string Command;
     private AppState appState;
     private string FileName = String.Empty;
-    private StringComparison StrComparison = StringComparison.CurrentCultureIgnoreCase;
-
     public InAppState(string currentDirectory)
     {
         _CurrentDirectory = currentDirectory;
