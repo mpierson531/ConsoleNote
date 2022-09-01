@@ -285,6 +285,9 @@ public class InAppState
 
     private void CreateFile() // Creates files
     {
+        ConsoleColor color = Console.ForegroundColor;
+        Console.ForegroundColor = ConsoleColor.Green;
+
         FileStream createdFile;
         string filePath;
 
@@ -307,19 +310,27 @@ public class InAppState
         }
         else
         {
+            Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine($"Failed to create {FileName}");
         }
+
+        Console.ForegroundColor = color;
     }
 
     private void WriteToFile() // Writes to files (with string)
     {
+        ConsoleColor color = Console.ForegroundColor;
+
         Console.WriteLine($"Enter the content to write to {FileName}.");
+
+        Console.ForegroundColor = ConsoleColor.White;
 
         string content = Console.ReadLine();
         content = InsertNewline(content);
         ExitChecking(content);
 
         string filePath;
+
         if (DoesFileNameHaveTXT())
         {
             filePath = FileName;
@@ -330,6 +341,7 @@ public class InAppState
         }
         
         File.AppendAllText(filePath, content);
+        Console.ForegroundColor = color;
         Console.WriteLine($"Content written to '{FileName}'");
     }
 
