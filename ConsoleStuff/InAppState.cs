@@ -15,9 +15,6 @@ public class InAppState
     private string FileName = String.Empty;
     public InAppState(string currentDirectory)
     {
-        _CurrentDirectory = currentDirectory;
-        //Command = command;
-
         appState = AppState.Introduction;
         Introduction();
     }
