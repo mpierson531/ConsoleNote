@@ -1,19 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Diagnostics;
-using System.Reflection.Metadata;
-
-namespace ConsoleStuff;
+﻿namespace ConsoleStuff;
 
 public class InAppState
 {
     private string Command;
     private AppState appState;
     private string FileName = String.Empty;
-    public InAppState(string currentDirectory)
+
+    public InAppState()
     {
         appState = AppState.Introduction;
         Introduction();
@@ -89,13 +82,15 @@ public class InAppState
         OpenDialogue();
 
         DeleteDialogue();
+
+        RemoveDialogue();
     }
 
     private void CommandDialogue() // Also serves as a "CommandNullDialogue"
     {
         ConsoleColor color = Console.ForegroundColor;
 
-        Console.WriteLine("Please enter a command: You can 'Open', 'Write', 'Create', or 'Delete'.");
+        Console.WriteLine("Please enter a command: You can 'Open', 'Write', 'Create', 'RemoveFrom', or 'Delete'.");
 
         Console.ForegroundColor = ConsoleColor.White;
 
@@ -176,6 +171,23 @@ public class InAppState
 
                 Console.ForegroundColor = color;
                 break;
+        }
+    }
+
+    private void RemoveDialogue()
+    {
+        if (Command.Equals("Remove", StringComparison.CurrentCultureIgnoreCase))
+        {
+            ConsoleColor color = Console.ForegroundColor;
+
+            Console.WriteLine("Enter the name or path of the file to remove from.");
+
+            Console.ForegroundColor = ConsoleColor.White;
+
+            FileName = Console.ReadLine().Trim();
+            ExitChecking(FileName);
+
+            Console.ForegroundColor = color;
         }
     }
 
@@ -274,6 +286,10 @@ public class InAppState
             case "delete":
                 DeleteFile();
                 break;
+            case "Remove":
+            case "remove":
+                RemoveFromFile();
+                break;
         }
     }
 
@@ -333,7 +349,7 @@ public class InAppState
         {
             filePath = FileName + ".txt";
         }
-        
+
         File.AppendAllText(filePath, content);
         Console.ForegroundColor = color;
         Console.WriteLine($"Content written to '{FileName}'");
@@ -397,6 +413,40 @@ public class InAppState
         else
         {
             Console.WriteLine($"'{filePath}' could not be found.");
+        }
+    }
+
+    private void RemoveFromFile() // Removes any string or line containing "contentToRemove"
+    {
+        ConsoleColor color = Console.ForegroundColor;
+        string filePath;
+
+        Console.WriteLine("Enter what to remove from the file.");
+
+        Console.ForegroundColor = ConsoleColor.White;
+
+        string contentToRemove = Console.ReadLine();
+
+        Console.ForegroundColor = color;
+
+        if (DoesFileNameHaveTXT())
+        {
+            filePath = FileName;
+        }
+        else
+        {
+            filePath = FileName + ".txt";
+        }
+
+        if (File.Exists(filePath))
+        {
+            List<string> contentOfFile = File.ReadLines(filePath).ToList();
+            contentOfFile.RemoveAll(i => i.Contains(contentToRemove));
+            File.WriteAllLines(filePath, contentOfFile);
+        }
+        else
+        {
+            Console.WriteLine($"File '{FileName}' could not be found.");
         }
     }
 

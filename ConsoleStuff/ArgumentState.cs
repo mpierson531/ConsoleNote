@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Metadata;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
-
-namespace ConsoleStuff;
+﻿namespace ConsoleStuff;
 
 internal class ArgumentState
 {
@@ -69,6 +61,10 @@ internal class ArgumentState
             case "delete":
                 DeleteFile(fileName);
                 break;
+            case "Remove":
+            case "remove":
+                RemoveFromFile(fileName, SingleStringContent);
+                break;
         }
     }
 
@@ -126,7 +122,7 @@ internal class ArgumentState
         }
         else if (!IsArgsBig && !FileNameHasTXT)
         {
-            SingleStringContent = InsertNewline(SingleStringContent);             
+            SingleStringContent = InsertNewline(SingleStringContent);
             Extensions.SpaceInsert(SingleStringContent);
             File.AppendAllText(fileName + ".txt", SingleStringContent);
         }
@@ -149,7 +145,8 @@ internal class ArgumentState
             Console.WriteLine("");
 
             openReader.Close();
-        } catch (FileNotFoundException)
+        }
+        catch (FileNotFoundException)
         {
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine($"File '{fileName}' could not be found.");
@@ -182,6 +179,46 @@ internal class ArgumentState
         {
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine($"'{filePath}' could not be found.");
+        }
+
+        Console.ForegroundColor = color;
+    }
+
+    private void RemoveFromFile(string fileName, string contentToRemove) // Removes any string or line containing "contentToRemove"
+    {
+        ConsoleColor color = Console.ForegroundColor;
+        string filePath;
+
+        if (FileNameHasTXT)
+        {
+            filePath = fileName;
+        }
+        else
+        {
+            filePath = fileName + ".txt";
+        }
+
+        if (File.Exists(filePath))
+        {
+            List<string> contentOfFile = File.ReadLines(filePath).ToList();
+
+            Predicate<string> predicateForRemoveAll = (i => i.Contains(contentToRemove));
+
+            contentOfFile.RemoveAll(predicateForRemoveAll);
+
+            contentOfFile.RemoveAll(i => contentOfFile.All(j => j == "") && i == "");
+
+            /*if (contentOfFile.All(i => i.Contains(" ") || i.Contains(""))
+            {
+                contentOfFile.RemoveAll(i => i == "" && i == " ");
+            }*/
+
+            File.WriteAllLines(filePath, contentOfFile);
+        }
+        else
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"File '{fileName}' could not be found.");
         }
 
         Console.ForegroundColor = color;
@@ -231,7 +268,8 @@ internal class ArgumentState
             {
                 SingleStringContent = SingleStringContent.Replace("\\n", Environment.NewLine);
             }
-        } catch (NullReferenceException) { }
+        }
+        catch (NullReferenceException) { }
 
         return SingleStringContent;
     }

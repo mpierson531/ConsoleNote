@@ -2,6 +2,7 @@
   "profiles": {
     "ConsoleNote": {
       "commandName": "Project",
+      "commandLineArgs": "remove hello 4",
       "workingDirectory": "C:\\Users\\Micah\\source\\repos\\ConsoleStuff\\ConsoleStuff\\bin\\Debug\\net6.0"
     }
   }

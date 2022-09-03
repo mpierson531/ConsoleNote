@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ConsoleStuff;
+﻿namespace ConsoleStuff;
 
 public class GlobalStates
 {
@@ -74,7 +67,7 @@ public class GlobalStates
     {
         if (globalState == GlobalState.InAppState)
         {
-            InAppState inApp = new InAppState(currentDirectory);
+            InAppState inApp = new InAppState();
             StateHandling(args, GlobalModifier.Exit, currentDirectory);
         }
         else if (globalState == GlobalState.ArgumentState)
