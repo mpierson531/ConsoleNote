@@ -1,4 +1,6 @@
-﻿namespace ConsoleStuff;
+﻿using System.Diagnostics;
+
+namespace ConsoleStuff;
 
 public class InAppState
 {
@@ -90,7 +92,7 @@ public class InAppState
     {
         ConsoleColor color = Console.ForegroundColor;
 
-        Console.WriteLine("Please enter a command: You can 'Open', 'Write', 'Create', 'RemoveFrom', or 'Delete'.");
+        Console.WriteLine("Please enter a command: You can 'Open', 'Write', 'Create', 'Remove', or 'Delete'.");
 
         Console.ForegroundColor = ConsoleColor.White;
 
@@ -442,6 +444,7 @@ public class InAppState
         {
             List<string> contentOfFile = File.ReadLines(filePath).ToList();
             contentOfFile.RemoveAll(i => i.Contains(contentToRemove));
+            contentOfFile.RemoveAll(i => contentOfFile.All(j => j == "") && i == "");
             File.WriteAllLines(filePath, contentOfFile);
         }
         else

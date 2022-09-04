@@ -208,11 +208,6 @@ internal class ArgumentState
 
             contentOfFile.RemoveAll(i => contentOfFile.All(j => j == "") && i == "");
 
-            /*if (contentOfFile.All(i => i.Contains(" ") || i.Contains(""))
-            {
-                contentOfFile.RemoveAll(i => i == "" && i == " ");
-            }*/
-
             File.WriteAllLines(filePath, contentOfFile);
         }
         else
