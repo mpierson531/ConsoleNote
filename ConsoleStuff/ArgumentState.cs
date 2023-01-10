@@ -37,7 +37,7 @@ internal class ArgumentState
 
         switch (command)
         {
-            case "Create":
+            case "CreateDialogue":
             case "create":
                 CreateFile(fileName);
                 break;
@@ -53,7 +53,7 @@ internal class ArgumentState
                     WriteToFile(fileName, content);
                 }
                 break;
-            case "Open":
+            case "OpenDialogue":
             case "open":
                 OpenFile(fileName);
                 break;

@@ -10,8 +10,7 @@ public class GlobalStates
         globalState = GlobalState.DetectingState;
         string currentDirectory = Environment.CurrentDirectory;
 
-        DetectingState(args, currentDirectory);
-        //GlobalStateTransition(args, currentDirectory);
+        DetectState(args, currentDirectory);
     }
 
     private enum GlobalState
@@ -24,32 +23,19 @@ public class GlobalStates
         ArgsNull, ArgsNotNull, Exit
     }
 
-    private void DetectingState(string[] args, string currentDirectory)
+    private void DetectState(string[] args, string currentDirectory)
     {
-        static bool IsArgsNull(string[] args)
+        if (args == null || args.Length < 2)
         {
-
-            if (args is null || args.Length < 2)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        if (IsArgsNull(args))
-        {
-            StateHandling(args, GlobalModifier.ArgsNull, currentDirectory);
+            HandleState(args, GlobalModifier.ArgsNull, currentDirectory);
         }
         else
         {
-            StateHandling(args, GlobalModifier.ArgsNotNull, currentDirectory);
+            HandleState(args, GlobalModifier.ArgsNotNull, currentDirectory);
         }
     }
 
-    private void StateHandling(string[] args, GlobalModifier globalModifier, string currentDirectory)
+    private void HandleState(string[] args, GlobalModifier globalModifier, string currentDirectory)
     {
         globalState = (globalState, globalModifier) switch
         {
@@ -57,7 +43,8 @@ public class GlobalStates
             (GlobalState.DetectingState, GlobalModifier.ArgsNotNull) => GlobalState.ArgumentState,
             (GlobalState.ArgumentState, GlobalModifier.ArgsNull) => GlobalState.InAppState,
             (GlobalState.InAppState, GlobalModifier.ArgsNotNull) => GlobalState.ArgumentState,
-            (GlobalState.ArgumentState, GlobalModifier.Exit) => GlobalState.Exiting
+            (GlobalState.ArgumentState, GlobalModifier.Exit) => GlobalState.Exiting,
+            (GlobalState.InAppState, GlobalModifier.Exit) => GlobalState.Exiting
         };
 
         GlobalStateTransition(args, currentDirectory);
@@ -68,13 +55,13 @@ public class GlobalStates
         if (globalState == GlobalState.InAppState)
         {
             InAppState inApp = new InAppState();
-            StateHandling(args, GlobalModifier.Exit, currentDirectory);
+            HandleState(args, GlobalModifier.Exit, currentDirectory);
         }
         else if (globalState == GlobalState.ArgumentState)
         {
             content = args.ToList();
             ArgumentState argState = new ArgumentState(content);
-            StateHandling(args, GlobalModifier.Exit, currentDirectory);
+            HandleState(args, GlobalModifier.Exit, currentDirectory);
         }
         else if (globalState == GlobalState.Exiting)
         {
