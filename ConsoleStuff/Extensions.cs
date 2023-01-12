@@ -1,4 +1,4 @@
-﻿namespace ConsoleStuff;
+﻿namespace ConsoleNote;
 
 public static class Extensions
 {
@@ -23,37 +23,41 @@ public static class Extensions
         return fileContents.ToList();
     }
 
-    public static List<string> BigCopy(List<string> content)
+    public static void SpaceInsert(List<string> strings)
     {
-        int fileContentsCounter = 0;
-        List<string> fileContents = new List<string>(content.Count - 2);
-
-        try
+        for (int i = 0; i < strings.Count; i++)
         {
-            for (int i = 2; i < content.Count; i++)
-            {
-                fileContents.Insert(fileContentsCounter, content[i]);
-                fileContentsCounter++;
-            }
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e.InnerException);
-        }
-
-        return fileContents;
-    }
-
-    public static void SpaceInsert(List<string> args)
-    {
-        for (int i = 0; i < args.Count; i++)
-        {
-            args[i] += " ";
+            strings[i] += " ";
         }
     }
 
     public static void SpaceInsert(string fileContent)
     {
         fileContent += " ";
+    }
+
+    public static void InsertNewline(List<string> bigCopy)
+    {
+        for (int i = 0; i < bigCopy.Count; i++)
+        {
+            if (bigCopy[i].Contains("\\n"))
+            {
+                bigCopy[i] = bigCopy[i].Replace("\\n", Environment.NewLine);
+            }
+        }
+    }
+
+    public static string InsertNewline(string SingleStringContent)
+    {
+        try
+        {
+            if (SingleStringContent.Contains("\\n"))
+            {
+                SingleStringContent = SingleStringContent.Replace("\\n", Environment.NewLine);
+            }
+        }
+        catch (NullReferenceException) { }
+
+        return SingleStringContent;
     }
 }

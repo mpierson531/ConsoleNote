@@ -1,19 +1,16 @@
-﻿using ConsoleNote;
-using System.Diagnostics;
-
-namespace ConsoleStuff;
+﻿namespace ConsoleNote;
 
 public class InAppState
 {
     private string Command;
     private AppState appState;
     private string FileName = String.Empty;
-    private IO IO;
+    private InAppIO IO;
     private StringComparison IgnoreCase = StringComparison.InvariantCultureIgnoreCase;
 
     public InAppState()
     {
-        IO = new IO();
+        IO = new InAppIO();
         ChangeState(AppState.Start);
     }
 
@@ -33,7 +30,6 @@ public class InAppState
 
         if (state == AppState.Running)
         {
-            IO.StartEndDialogue();
             ChangeState(AppState.Done);
         }
         else if (state == AppState.Done)

@@ -1,15 +1,13 @@
-﻿namespace ConsoleStuff;
+﻿namespace ConsoleNote;
 
 public class GlobalStates
 {
-    private List<string> content;
     private GlobalState globalState;
 
     public GlobalStates(string[] args)
     {
         globalState = GlobalState.DetectingState;
         string currentDirectory = Environment.CurrentDirectory;
-
         DetectState(args, currentDirectory);
     }
 
@@ -59,8 +57,8 @@ public class GlobalStates
         }
         else if (globalState == GlobalState.ArgumentState)
         {
-            content = args.ToList();
-            ArgumentState argState = new ArgumentState(content);
+            List<string> content = args.ToList();
+            new ArgumentState(content);
             HandleState(args, GlobalModifier.Exit, currentDirectory);
         }
         else if (globalState == GlobalState.Exiting)

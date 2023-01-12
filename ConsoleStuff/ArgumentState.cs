@@ -1,227 +1,157 @@
-﻿namespace ConsoleStuff;
+﻿using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
+
+namespace ConsoleNote;
 
 internal class ArgumentState
 {
     private string SingleStringContent;
-    private string CurrentDirectory = Directory.GetCurrentDirectory();
-    private readonly StringComparison stringComparison = StringComparison.CurrentCultureIgnoreCase;
     private bool IsArgsBig;
-    private bool FileNameHasTXT;
-    public ArgumentState(List<string> content)
+
+    public ArgumentState(List<string> args)
     {
-        ///
-        /// NEED TO FIGURE OUT WHY IT'S WRITING THE CONTENT TWICE WHEN IsArgsBig IS TRUE. 
-        /// 
-        /// Figured it out: when ArgumentState was done, it kept returning to StatesClass and running again with the same variable values
-        /// 
+        List<string> Args = args;
 
-        List<string> Content = content;
-
-        string command = Content[0].Trim();
-        string fileName = Content[1];
+        string command = Args[0].Trim();
+        string filename = Args[1].Trim();
+        string filePath = StorageHandler.GetValidFilename(filename);
 
         try
         {
-            SingleStringContent = Content[2];
+            SingleStringContent = Args[2];
         }
         catch (ArgumentOutOfRangeException) { }
 
-        IsBig(Content);
-        DoesFileNameHaveTXT(fileName);
-        CreatingWriting(command, fileName, Content);
+        IsBig(Args);
+        RunCommand(command, filePath, Args);
     }
 
-    private void CreatingWriting(string command, string fileName, List<string> content)
+    private void RunCommand(string command, string filePath, List<string> content)
     {
         List<string> bigCopyOfContent;
 
         switch (command)
         {
-            case "CreateDialogue":
+            case "Create":
             case "create":
-                CreateFile(fileName);
+                StartFileCreation(filePath);
                 break;
             case "Write":
             case "write":
                 if (IsArgsBig)
                 {
-                    bigCopyOfContent = Extensions.BigCopy(content);
-                    WriteToFile(fileName, bigCopyOfContent);
+                    bigCopyOfContent = GetArgsContent(content);
+                    StorageHandler.WriteFile(filePath, bigCopyOfContent, false);
                 }
                 else
                 {
-                    WriteToFile(fileName, content);
+                    StorageHandler.WriteFile(filePath, SingleStringContent, false);
                 }
                 break;
-            case "OpenDialogue":
+            case "Open":
             case "open":
-                OpenFile(fileName);
+                StartOpenFile(filePath);
                 break;
             case "Delete":
             case "delete":
-                DeleteFile(fileName);
+                StartFileDeletion(filePath);
                 break;
             case "Remove":
             case "remove":
-                RemoveFromFile(fileName, SingleStringContent);
+                if (IsArgsBig)
+                {
+                    bigCopyOfContent = GetArgsContent(content);
+                    RemoveFromFile(filePath, bigCopyOfContent);
+                } else
+                {
+                    RemoveFromFile(filePath, SingleStringContent);
+                }
                 break;
         }
     }
 
-    private void CreateFile(string fileName) // Creates files
+    private void StartFileCreation(string filename) // Creates files
     {
-        FileStream createdFile;
-        string filePath = CurrentDirectory + @$"\{fileName}" + ".txt";
-
-        if (FileNameHasTXT)
-        {
-            filePath = CurrentDirectory + @$"\{fileName}";
-        }
-
-        createdFile = File.Create(filePath);
-        createdFile.Close();
+        string filePath = StorageHandler.GetValidFilename(filename);
+        var file = StorageHandler.CreateFile(filePath);
+        file.Close();
         Thread.Sleep(250);
 
         if (File.Exists(filePath))
         {
-            Console.WriteLine($"{fileName} created.");
+            Logger.WriteLine($"{filePath} created.");
         }
         else
         {
-            Console.WriteLine($"Failed to create {fileName}");
+            Logger.WriteLine($"Failed to create {filePath}");
         }
     }
 
-    private void WriteToFile(string fileName, List<string> bigCopy) // Also inserts spaces and newlines
+    private void StartOpenFile(string filename)
     {
-        if (IsArgsBig && FileNameHasTXT)
-        {
-            InsertNewline(bigCopy);
-            Extensions.SpaceInsert(bigCopy);
-
-            foreach (string i in bigCopy)
-            {
-                File.AppendAllText(fileName, i);
-            }
-        }
-        else if (IsArgsBig && !FileNameHasTXT)
-        {
-            InsertNewline(bigCopy);
-            Extensions.SpaceInsert(bigCopy);
-
-            foreach (string j in bigCopy)
-            {
-                File.AppendAllText(fileName + ".txt", j);
-            }
-        }
-        else if (!IsArgsBig && FileNameHasTXT)
-        {
-            SingleStringContent = InsertNewline(SingleStringContent);
-            Extensions.SpaceInsert(SingleStringContent);
-            File.AppendAllText(fileName, SingleStringContent);
-        }
-        else if (!IsArgsBig && !FileNameHasTXT)
-        {
-            SingleStringContent = InsertNewline(SingleStringContent);
-            Extensions.SpaceInsert(SingleStringContent);
-            File.AppendAllText(fileName + ".txt", SingleStringContent);
-        }
-    }
-
-    private void OpenFile(string fileName)
-    {
-        ConsoleColor color = Console.ForegroundColor;
-
-        Console.ForegroundColor = ConsoleColor.Yellow;
-
         try
         {
-            FileStream openStream = File.Open(fileName + ".txt", FileMode.Open, FileAccess.Read);
-            StreamReader openReader = new StreamReader(openStream);
-
-            Console.WriteLine($"From '{fileName}':");
-            Console.WriteLine("");
-            Console.WriteLine(openReader.ReadToEnd());
-            Console.WriteLine("");
-
-            openReader.Close();
+            string fileContent = StorageHandler.ReadFile(filename);
+            Logger.WriteLine($"From '{filename}': \n");
+            Logger.WriteLine(fileContent + "\n");
         }
         catch (FileNotFoundException)
         {
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine($"File '{fileName}' could not be found.");
+            Logger.Error($"File '{filename}' could not be found.");
         }
-
-        Console.ForegroundColor = color;
     }
 
-    private void DeleteFile(string fileName) // Not working
+    private void StartFileDeletion(string filename) // Not working
     {
-        ConsoleColor color = Console.ForegroundColor;
-        Console.ForegroundColor = ConsoleColor.Green;
-        string filePath;
-
-        if (FileNameHasTXT)
-        {
-            filePath = fileName;
-        }
-        else
-        {
-            filePath = fileName + ".txt";
-        }
+        string filePath = StorageHandler.GetValidFilename(filename);
 
         if (File.Exists(filePath))
         {
-            File.Delete(fileName + ".txt");
-            Console.WriteLine(fileName + " deleted.");
+            File.Delete(filename);
+            Logger.WriteLine(filePath + " deleted.");
         }
         else
         {
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine($"'{filePath}' could not be found.");
+            Logger.Error($"'{filePath}' could not be found.");
         }
-
-        Console.ForegroundColor = color;
     }
 
-    private void RemoveFromFile(string fileName, string contentToRemove) // Removes any string or line containing "contentToRemove"
+    private void RemoveFromFile(string filename, List<string> contentToRemove) // Removes any string or line containing "contentToRemove"
     {
-        ConsoleColor color = Console.ForegroundColor;
-        string filePath;
-
-        if (FileNameHasTXT)
+        string filePath = StorageHandler.GetValidFilename(filename);
+        if (!File.Exists(filePath))
         {
-            filePath = fileName;
-        }
-        else
-        {
-            filePath = fileName + ".txt";
+            Logger.Error($"File '{filename}' could not be found.");
+            return;
         }
 
-        if (File.Exists(filePath))
+        string fileContent = StorageHandler.ReadFile(filePath);
+        string leftoverContent = Parser.Replace(fileContent, contentToRemove, "");
+        StorageHandler.WriteFile(filePath, leftoverContent, false);
+
+        Logger.WriteLine("Content removed.");
+    }
+
+    private void RemoveFromFile(string filePath, string removalContent)
+    {
+        if (!File.Exists(filePath)) 
         {
-            List<string> contentOfFile = File.ReadLines(filePath).ToList();
-
-            Predicate<string> predicateForRemoveAll = (i => i.Contains(contentToRemove));
-
-            contentOfFile.RemoveAll(predicateForRemoveAll);
-
-            contentOfFile.RemoveAll(i => contentOfFile.All(j => j == "") && i == "");
-
-            File.WriteAllLines(filePath, contentOfFile);
-        }
-        else
-        {
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine($"File '{fileName}' could not be found.");
+            Logger.Error($"File '{filePath}' could not be found.");
+            return;
         }
 
-        Console.ForegroundColor = color;
+        string fileContent = StorageHandler.ReadFile(filePath);
+        string leftoverContent = Parser.Replace(fileContent, removalContent, "");
+
+        StorageHandler.WriteFile(filePath, leftoverContent, false);
+
+        Logger.WriteLine("Content removed.");
     }
 
     private void IsBig(List<string> content)
     {
-        if (content.Count > 0)
+        if (content.Count > 3)
         {
             IsArgsBig = true;
         }
@@ -231,41 +161,17 @@ internal class ArgumentState
         }
     }
 
-    private void DoesFileNameHaveTXT(string fileName) // Checks to see if fileName has ".txt"
+    private List<string> GetArgsContent(List<string> content)
     {
-        if (!fileName.Contains(".txt", StringComparison.CurrentCultureIgnoreCase))
-        {
-            FileNameHasTXT = false;
-        }
-        else
-        {
-            FileNameHasTXT = true;
-        }
-    }
+        int fileContentsCounter = 0;
+        List<string> fileContents = new List<string>(content.Count - 2);
 
-    private void InsertNewline(List<string> bigCopy)
-    {
-        for (int i = 0; i < bigCopy.Count; i++)
+        for (int i = 2; i < content.Count; i++)
         {
-            if (bigCopy[i].Contains("\\n"))
-            {
-                bigCopy[i] = bigCopy[i].Replace("\\n", Environment.NewLine);
-            }
-
+            fileContents.Insert(fileContentsCounter, content[i]);
+            fileContentsCounter++;
         }
-    }
 
-    private string InsertNewline(string SingleStringContent)
-    {
-        try
-        {
-            if (SingleStringContent.Contains("\\n"))
-            {
-                SingleStringContent = SingleStringContent.Replace("\\n", Environment.NewLine);
-            }
-        }
-        catch (NullReferenceException) { }
-
-        return SingleStringContent;
+        return fileContents;
     }
 }

@@ -1,28 +1,75 @@
-﻿namespace ConsoleNote
+﻿using System.Text;
+
+namespace ConsoleNote
 {
 
     public static class StorageHandler
     {
         public static string ReadFile(string filePath)
         {
+            if (!File.Exists(filePath))
+            {
+                return "\0";
+            }
+
             using var stream = new StreamReader(filePath);
             return stream.ReadToEnd();
         }
 
-        public static void WriteFile(string filePath, string content)
+        public static bool WriteFile(string filePath, string content, bool append)
         {
-            using var fileSave = new StreamWriter(File.Create($"{filePath}"));
-            fileSave.WriteLine(content);
-            fileSave.Close();
+            if (!File.Exists(filePath) && append)
+            {
+                return false;
+            }
+
+            if (append)
+            {
+                File.AppendAllText(filePath, content);
+            }
+            else
+            {
+                File.WriteAllText(filePath, content);
+            }
+
+            return true;
         }
 
-        public static FileStream CreateFile(string filename) // Creates files
+        public static bool WriteFile(string filename, List<string> content, bool append)
         {
-            return File.Create(filename);
+            string filePath = GetValidFilename(filename);
+            StringBuilder builder = new StringBuilder();
+
+            Extensions.InsertNewline(content);
+            Extensions.SpaceInsert(content);
+
+            foreach (string i in content)
+            {
+                builder.Append(i);
+            }
+
+            return WriteFile(filePath, builder.ToString(), append);
+        }
+
+        public static FileStream CreateFile(string filename)
+        {
+            try
+            {
+                return File.Create(filename);
+            } catch (Exception)
+            {
+                Logger.Error("Failed to create file.");
+                return null;
+            }
         }
 
         public static bool Delete(string filename)
         {
+            if (!File.Exists(filename))
+            {
+                return false;
+            }
+
             try
             {
                 File.Delete(filename);
@@ -33,7 +80,12 @@
             }
         }
 
-        public static string GetValidFilename(string fileName) // Checks to see if filename has ".txt"
+        public static bool Exists(string filePath)
+        {
+            return File.Exists(filePath);
+        }
+
+        public static string GetValidFilename(string fileName)
         {
             string filePath;
             if (fileName.Contains(".txt", StringComparison.CurrentCultureIgnoreCase))
